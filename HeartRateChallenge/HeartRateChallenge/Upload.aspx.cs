@@ -71,7 +71,7 @@ namespace HeartRateChallenge
             if ((FileInput.PostedFile != null) && FileInput.PostedFile.ContentLength > 0)
             {
                 string FileName = System.IO.Path.GetFileName(FileInput.PostedFile.FileName);
-                string SaveLocation = Server.MapPath("Data") + "\\" + FileName;
+                string SaveLocation = Server.MapPath("App_Data") + "\\" + FileName;
                 try
                 {
                     FileInput.PostedFile.SaveAs(SaveLocation);
@@ -91,15 +91,7 @@ namespace HeartRateChallenge
         protected void ProcessZip()
         {
             string FileName = System.IO.Path.GetFileName(FileInput.PostedFile.FileName);
-            string SaveLocation = Server.MapPath("Data") + "\\" + FileName;
-            try
-            {
-                FileInput.PostedFile.SaveAs(SaveLocation);
-            }
-            catch (Exception ex)
-            {
-                Response.Write("Error during SaveAs: " + ex.Message);
-            }
+            string SaveLocation = Server.MapPath("App_Data") + "\\" + FileName;            
 
             DataTable dtHeartRateZones = new DataTable();
             dtHeartRateZones = GetHeartRateZones();
