@@ -5,7 +5,7 @@
     <div class="jumbotron" style="text-align: center;">
         <h1>Heart Rate Challenge</h1>
         <p class="lead">Welcome to the Home Page of the February, 2020 Heart Rate Challenge.</p>
-        <img src="https://media.giphy.com/media/10hYJnJLGtbUvC/giphy.gif" alt="gif image" />
+        <img class="img-responsive center-block" src="https://media.giphy.com/media/10hYJnJLGtbUvC/giphy.gif" alt="gif image"  />
     </div>
     <div>
         <p class="lead" style="text-align: center;">Current Leaderboard Standings:</p>
@@ -13,8 +13,8 @@
     <div>
         <asp:GridView ID="gvLeaderboard" CssClass="table table-responsive table-striped table-hover" HeaderStyle-BackColor="#343A40" HeaderStyle-ForeColor="White" HeaderStyle-CssClass="thead-dark" runat="server" AutoGenerateColumns="false">
             <Columns>
-                <asp:BoundField DataField="Rank" HeaderText="Rank" ItemStyle-CssClass="table-responsive" />
-                <asp:BoundField DataField="Name" HeaderText="Name" ItemStyle-CssClass="table-responsive"/>
+                <asp:BoundField DataField="Rank" HeaderText="Rank" ItemStyle-Width="33%" ItemStyle-CssClass="table-responsive" />
+                <asp:BoundField DataField="Name" HeaderText="Name" ItemStyle-Width="33%" ItemStyle-CssClass="table-responsive"/>
                 <asp:BoundField DataField="TotalPoints" HeaderText="Total Points" ItemStyle-CssClass="table-responsive" />
             </Columns>
         </asp:GridView>
@@ -26,7 +26,16 @@
     </div>
     <div class="row" style="text-align: center;">
         <div class="col-md-4">
-            <h3>Download Your Heartrate Data:</h3>
+            <h3>Exercise while wearing your Heartrate Monitor</h3>
+            <p>
+                Record your heartrate during a workout using the Polar Beat app.
+            </p>
+            <p>
+                <a class="btn btn-default" href="https://www.polar.com/us-en/products/polar_beat" target="_blank">Polar Beat App Information &raquo;</a>
+            </p>
+        </div>
+        <div class="col-md-4">
+            <h3>Download Your Heartrate Data from Flow-Exporter:</h3>
             <p>
                 Export your heartrate data files over the past week as zipped .csv files from "Flow-Exporter" website.
             </p>
@@ -43,7 +52,7 @@
                 <a class="btn btn-default" href="/Upload">Upload Page &raquo;</a>
             </p>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4-offset-1">
             <h3>View Current Leaderboard Standings:</h3>
             <p>
                 After uploading your data, the changes to your Total Points will reflect in the Current Leaderboard Standings above.

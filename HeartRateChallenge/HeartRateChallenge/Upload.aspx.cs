@@ -36,31 +36,31 @@ namespace HeartRateChallenge
             //unpackage zip?
             //foreach excel file in .zip
             //startat Cell C4 then loop downward to end
-            var heartrate = 136; // dummy variable but will be excelreader[intRowNum, 4]
-            var UserRange1LB = 104;
+            //var heartrate = 136; // dummy variable but will be excelreader[intRowNum, 4]
+            //var UserRange1LB = 104;
             //UserRange1LB = dtHeartRateZones[Zone1LowerBound];
-            var UserRange1UB = 114;
-            var UserRange2LB = 114;
-            var UserRange2UB = 133;
-            var UserRange3LB = 133;
-            var UserRange3UB = 152;
-            var UserRange4LB = 152;
-            var UserRange4UB = 172;
-            var UserRange5LB = 172;
-            var UserRange5UB = 220; //needs to be higher than max heart rate
-            int Range1Seconds, Range2Seconds, Range3Seconds, Range4Seconds, Range5Seconds;
-            Range1Seconds = Range2Seconds = Range3Seconds = Range4Seconds = Range5Seconds = 0; //initialize seconds to 0
+            //var UserRange1UB = 114;
+            //var UserRange2LB = 114;
+            //var UserRange2UB = 133;
+            //var UserRange3LB = 133;
+            //var UserRange3UB = 152;
+            //var UserRange4LB = 152;
+            //var UserRange4UB = 172;
+            //var UserRange5LB = 172;
+            //var UserRange5UB = 220; //needs to be higher than max heart rate
+            //int Range1Seconds, Range2Seconds, Range3Seconds, Range4Seconds, Range5Seconds;
+            //Range1Seconds = Range2Seconds = Range3Seconds = Range4Seconds = Range5Seconds = 0; //initialize seconds to 0
 
-            if (heartrate >= UserRange1LB && heartrate < UserRange1UB)
-                Range1Seconds++;
-            else if (heartrate >= UserRange2LB && heartrate < UserRange2UB)
-                Range2Seconds++;
-            else if (heartrate >= UserRange3LB && heartrate < UserRange3UB)
-                Range3Seconds++;
-            else if (heartrate >= UserRange4LB && heartrate < UserRange4UB)
-                Range4Seconds++;
-            else if (heartrate >= UserRange5LB && heartrate < UserRange5UB)
-                Range5Seconds++;
+            //if (heartrate >= UserRange1LB && heartrate < UserRange1UB)
+            //    Range1Seconds++;
+            //else if (heartrate >= UserRange2LB && heartrate < UserRange2UB)
+            //    Range2Seconds++;
+            //else if (heartrate >= UserRange3LB && heartrate < UserRange3UB)
+            //    Range3Seconds++;
+            //else if (heartrate >= UserRange4LB && heartrate < UserRange4UB)
+            //    Range4Seconds++;
+            //else if (heartrate >= UserRange5LB && heartrate < UserRange5UB)
+            //    Range5Seconds++;
 
             //Convert seconds to points
 
@@ -97,6 +97,7 @@ namespace HeartRateChallenge
             dtHeartRateZones = GetHeartRateZones();
 
             int heartrate; //probably make class for this
+            int TotalPoints = 0;
             var UserRange1LB = (int)dtHeartRateZones.AsEnumerable().Where(x => x.Field<int>("CompetitorID").Equals(int.Parse(txtCompetitorID.Text.Trim()))).FirstOrDefault()["Zone1LowerBound"];
             var UserRange1UB = (int)dtHeartRateZones.AsEnumerable().Where(x => x.Field<int>("CompetitorID").Equals(int.Parse(txtCompetitorID.Text.Trim()))).FirstOrDefault()["Zone1UpperBound"];
             var UserRange2LB = (int)dtHeartRateZones.AsEnumerable().Where(x => x.Field<int>("CompetitorID").Equals(int.Parse(txtCompetitorID.Text.Trim()))).FirstOrDefault()["Zone2LowerBound"];
@@ -107,19 +108,20 @@ namespace HeartRateChallenge
             var UserRange4UB = (int)dtHeartRateZones.AsEnumerable().Where(x => x.Field<int>("CompetitorID").Equals(int.Parse(txtCompetitorID.Text.Trim()))).FirstOrDefault()["Zone4UpperBound"];
             var UserRange5LB = (int)dtHeartRateZones.AsEnumerable().Where(x => x.Field<int>("CompetitorID").Equals(int.Parse(txtCompetitorID.Text.Trim()))).FirstOrDefault()["Zone5LowerBound"];
             var UserRange5UB = (int)dtHeartRateZones.AsEnumerable().Where(x => x.Field<int>("CompetitorID").Equals(int.Parse(txtCompetitorID.Text.Trim()))).FirstOrDefault()["Zone5UpperBound"];
+                        
 
-            
             using (ZipArchive archive = ZipFile.OpenRead(SaveLocation))
             {
                 foreach (ZipArchiveEntry entry in archive.Entries)
                 {
-                    int Range1Seconds, Range2Seconds, Range3Seconds, Range4Seconds, Range5Seconds, Range1Minutes, Range2Minutes, Range3Minutes, Range4Minutes, Range5Minutes, Range1Points, Range2Points, Range3Points, Range4Points, Range5Points, TotalPoints;
+                    int Range1Seconds, Range2Seconds, Range3Seconds, Range4Seconds, Range5Seconds, Range1Minutes, Range2Minutes, Range3Minutes, Range4Minutes, Range5Minutes, Range1Points, Range2Points, Range3Points, Range4Points, Range5Points;
+                    
 
                     Range1Seconds = Range2Seconds = Range3Seconds = Range4Seconds = Range5Seconds = 0; //initialize seconds to 0
 
                     Range1Minutes = Range2Minutes = Range3Minutes = Range4Minutes = Range5Minutes = 0;
 
-                    Range1Points = Range2Points = Range3Points = Range4Points = Range5Points = TotalPoints = 0;
+                    Range1Points = Range2Points = Range3Points = Range4Points = Range5Points = 0;
 
                     if (entry.FullName.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
                     {
@@ -171,11 +173,12 @@ namespace HeartRateChallenge
                             Range4Points = (Range4Minutes * 6);
                             Range5Points = (Range5Minutes * 9);
 
-                            TotalPoints = (Range1Points + Range2Points + Range3Points + Range4Points + Range5Points);
+                            TotalPoints += (Range1Points + Range2Points + Range3Points + Range4Points + Range5Points);
 
-                            //for reference
-                            Response.Write($"POINTS: {Range1Points.ToString()}, {Range2Points.ToString()}, {Range3Points.ToString()}, {Range4Points.ToString()}, {Range5Points.ToString()}; TOTAL: {TotalPoints.ToString()}");
+                            ////for reference
+                            //Response.Write($"POINTS: {Range1Points.ToString()}, {Range2Points.ToString()}, {Range3Points.ToString()}, {Range4Points.ToString()}, {Range5Points.ToString()}");
                             
+                            //NEEDS TO DELETE FILE FROM DATA AFTER PROCESSING
                         }
                         catch (Exception ex)
                         {
@@ -184,12 +187,18 @@ namespace HeartRateChallenge
                     }
                 }
             }
+            ////Write final total
+            AddTotalPoints(TotalPoints);
+
+            //Delete CSV from Server Data
+            File.Delete(SaveLocation);
         }
         protected DataTable GetHeartRateZones()
         {
             DataTable dt = new DataTable();
             SqlConnection sqlCon = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["connStr"].ConnectionString);
-            SqlCommand sqlCmd = new SqlCommand($"SELECT * FROM [dbo].[tbl_CompetitorHeartRateZones] WHERE [CompetitorID] = {txtCompetitorID.Text}", sqlCon);
+            SqlCommand sqlCmd = new SqlCommand($"SELECT * FROM [dbo].[tbl_CompetitorHeartRateZones] WHERE [CompetitorID] = @CompetitorID", sqlCon);
+            sqlCmd.Parameters.AddWithValue("@CompetitorID", txtCompetitorID.Text);
 
             try
             {
@@ -205,6 +214,25 @@ namespace HeartRateChallenge
                 Response.Write("Error: " + ex.Message);
             }
             return dt;
+        }
+
+        protected void AddTotalPoints(int TP)
+        {
+            SqlConnection sqlCon = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["connStr"].ConnectionString);
+            SqlCommand sqlCmd = new SqlCommand($"UPDATE [tbl_Leaderboard] SET [TotalPoints] = [TotalPoints] + @TotalPoints WHERE [CompetitorID] = @CompetitorID", sqlCon);
+            sqlCmd.Parameters.AddWithValue("@TotalPoints", TP);
+            sqlCmd.Parameters.AddWithValue("@CompetitorID", txtCompetitorID.Text);
+
+            try
+            {
+                sqlCon.Open();
+                sqlCmd.ExecuteNonQuery();
+                sqlCon.Close();
+            }
+            catch (Exception ex)
+            {
+                Response.Write("Error During AddTotalPoints: " + ex.Message);
+            }
         }
     }
 }
