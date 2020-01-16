@@ -191,7 +191,7 @@ namespace HeartRateChallenge
             AddTotalPoints(TotalPoints);
 
             //Delete CSV from Server Data
-            File.Delete(SaveLocation);
+            //File.Delete(SaveLocation);
         }
         protected DataTable GetHeartRateZones()
         {
