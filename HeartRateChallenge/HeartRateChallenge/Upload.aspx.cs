@@ -91,7 +91,17 @@ namespace HeartRateChallenge
         protected void ProcessZip()
         {
             string FileName = System.IO.Path.GetFileName(FileInput.PostedFile.FileName);
-            string SaveLocation = Server.MapPath("App_Data") + "\\" + FileName;            
+            string SaveLocation = Server.MapPath("App_Data") + "\\" + FileName;
+
+            try
+            {
+                FileInput.PostedFile.SaveAs(SaveLocation);
+                Response.Write("The file has been uploaded.");
+            }
+            catch (Exception ex)
+            {
+                Response.Write("Error: " + ex.Message);
+            }
 
             DataTable dtHeartRateZones = new DataTable();
             dtHeartRateZones = GetHeartRateZones();
