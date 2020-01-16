@@ -26,7 +26,7 @@ namespace HeartRateChallenge
             dtHeartRateZones = GetHeartRateZones();
 
             //Receive zip upload
-            GetUpload();
+            //GetUpload();
             ProcessZip();
 
 
@@ -66,12 +66,12 @@ namespace HeartRateChallenge
 
         }
 
-        protected void GetUpload()
+        protected void GetUpload() //useless code
         {
             if ((FileInput.PostedFile != null) && FileInput.PostedFile.ContentLength > 0)
             {
                 string FileName = System.IO.Path.GetFileName(FileInput.PostedFile.FileName);
-                string SaveLocation = Server.MapPath("App_Data") + "\\" + FileName;
+                string SaveLocation = Server.MapPath("~/App_Data/") + FileName;
                 try
                 {
                     FileInput.PostedFile.SaveAs(SaveLocation);
@@ -91,7 +91,7 @@ namespace HeartRateChallenge
         protected void ProcessZip()
         {
             string FileName = System.IO.Path.GetFileName(FileInput.PostedFile.FileName);
-            string SaveLocation = Server.MapPath("App_Data") + "\\" + FileName;
+            string SaveLocation = Server.MapPath("~/App_Data/") + FileName;
 
             try
             {
