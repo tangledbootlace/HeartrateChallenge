@@ -92,6 +92,14 @@ namespace HeartRateChallenge
         {
             string FileName = System.IO.Path.GetFileName(FileInput.PostedFile.FileName);
             string SaveLocation = Server.MapPath("Data") + "\\" + FileName;
+            try
+            {
+                FileInput.PostedFile.SaveAs(SaveLocation);
+            }
+            catch (Exception ex)
+            {
+                Response.Write("Error during SaveAs: " + ex.Message);
+            }
 
             DataTable dtHeartRateZones = new DataTable();
             dtHeartRateZones = GetHeartRateZones();
