@@ -31,6 +31,24 @@ namespace HeartRateChallenge {
         protected global::System.Web.UI.WebControls.TextBox txtCompetitorID;
         
         /// <summary>
+        /// lblUpload control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblUpload;
+        
+        /// <summary>
+        /// FileInput control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputFile FileInput;
+        
+        /// <summary>
         /// btnSubmit control.
         /// </summary>
         /// <remarks>
