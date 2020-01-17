@@ -31,6 +31,15 @@ namespace HeartRateChallenge {
         protected global::System.Web.UI.WebControls.TextBox txtCompetitorID;
         
         /// <summary>
+        /// txtCompetitorIDRequiredValidator control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator txtCompetitorIDRequiredValidator;
+        
+        /// <summary>
         /// lblUpload control.
         /// </summary>
         /// <remarks>
@@ -49,6 +58,15 @@ namespace HeartRateChallenge {
         protected global::System.Web.UI.HtmlControls.HtmlInputFile FileInput;
         
         /// <summary>
+        /// FileInputRequiredValidator control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator FileInputRequiredValidator;
+        
+        /// <summary>
         /// btnSubmit control.
         /// </summary>
         /// <remarks>
@@ -56,14 +74,5 @@ namespace HeartRateChallenge {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSubmit;
-        
-        /// <summary>
-        /// btnTest control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnTest;
     }
 }
