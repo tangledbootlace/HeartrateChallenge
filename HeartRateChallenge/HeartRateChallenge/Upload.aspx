@@ -21,7 +21,7 @@
             <asp:Button CssClass="btn btn-primary" ID="btnSubmit" runat="server" Text="Submit" OnClick="btnSubmit_Click" />
         </div>
         <div>
-            <asp:Button ID="btnTest" runat="server" Text="Test" OnClick="btnTest_Click" />
+            <asp:Button ID="btnTest" CssClass="btn btn-secondary" runat="server" Text="Test" OnClick="btnTest_Click" />
         </div>
     </div>
 </asp:Content>
