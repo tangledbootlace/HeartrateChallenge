@@ -251,5 +251,10 @@ namespace HeartRateChallenge
                 Response.Write("Error During AddTotalPoints: " + ex.Message);
             }
         }
+
+        protected void btnTest_Click(object sender, EventArgs e)
+        {
+            Response.Write(Server.MapPath("~/App_Data/"));
+        }
     }
 }
