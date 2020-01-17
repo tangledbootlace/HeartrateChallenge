@@ -10,6 +10,8 @@ using System.IO;
 using System.IO.Compression;
 using OfficeOpenXml;
 using System.Globalization;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace HeartRateChallenge
 {
@@ -71,10 +73,10 @@ namespace HeartRateChallenge
             if ((FileInput.PostedFile != null) && FileInput.PostedFile.ContentLength > 0)
             {
                 string FileName = System.IO.Path.GetFileName(FileInput.PostedFile.FileName);
-                string SavePath = Server.MapPath("~App_Data");
+                string SavePath = Server.MapPath("~/App_Data/");
                 if (!Directory.Exists(SavePath))
                 {
-                    Directory.CreateDirectory(SavePath);
+                    Directory.CreateDirectory(SavePath);                    
                 }
                 string SaveLocation = SavePath + FileName;
                 try
@@ -96,7 +98,7 @@ namespace HeartRateChallenge
         protected void ProcessZip()
         {
             string FileName = System.IO.Path.GetFileName(FileInput.PostedFile.FileName);
-            string SaveLocation = Server.MapPath("~/App_Data/") + FileName;
+            string SaveLocation = Server.MapPath("App_Data/") + FileName;
 
             try
             {
