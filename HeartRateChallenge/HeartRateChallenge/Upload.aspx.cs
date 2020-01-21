@@ -25,15 +25,14 @@ namespace HeartRateChallenge
         
         protected void ProcessZip()
         {
+            //TODO: Check for proper competitorID or make competitorID control a dropdown
             string FileName = System.IO.Path.GetFileName(FileInput.PostedFile.FileName);
             if (int.TryParse(txtCompetitorID.Text, out var id))
             {
                 if (FileName.EndsWith(".zip"))
                 {
-                    if (FileName != CheckFileRecords(id, FileName))
+                    if (!CheckFileRecords(id, FileName))
                     {
-
-
                         string SaveLocation = Server.MapPath("~/App_Data/") + FileName;
 
                         try
@@ -220,9 +219,10 @@ namespace HeartRateChallenge
             }
         }
 
-        protected string CheckFileRecords(int CompetitorID, string FileName)
+        protected bool CheckFileRecords(int CompetitorID, string FileName)
         {
-            string Record = "";
+            bool Record = false;
+            string Exists = "";
             SqlConnection sqlCon = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["connStr"].ConnectionString);
             SqlCommand sqlCmd = new SqlCommand($"SELECT [FileName] FROM [tbl_UploadHistory] WHERE [CompetitorID] = @CompetitorID AND [FileName] = @FileName", sqlCon);
             sqlCmd.Parameters.AddWithValue("@CompetitorID", CompetitorID);
@@ -231,6 +231,11 @@ namespace HeartRateChallenge
             try
             {
                 sqlCon.Open();
+                var rdr = sqlCmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    Exists = rdr.Read().ToString();
+                }
 
                 //TODO: STORE RETURNED RECORD FILENAME IN STRING
                 
@@ -240,6 +245,9 @@ namespace HeartRateChallenge
             {
                 Response.Write("Error During RecordFileName: " + ex.Message);
             }
+
+            if (Exists == "True")
+                Record = true;
 
             return Record;
         }
