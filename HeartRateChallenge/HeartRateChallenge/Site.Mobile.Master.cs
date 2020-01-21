@@ -11,7 +11,7 @@ namespace HeartRateChallenge
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            //TODO: Disable Mobile site and just have responsive master
         }
     }
 }

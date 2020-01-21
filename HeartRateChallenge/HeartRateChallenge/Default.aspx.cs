@@ -26,16 +26,6 @@ namespace HeartRateChallenge
             gvLeaderboard.DataSource = SqlDataSource1;
             gvLeaderboard.DataBind();
             gvLeaderboard.HeaderRow.TableSection = TableRowSection.TableHeader;
-
-            //SELECT ROW_NUMBER() OVER (ORDER BY [Total Points] DESC) AS Rank, 
-            //SqlConnection sqlCon = new SqlConnection(@"Data Source=heartratechallenge.database.windows.net;Initial Catalog=HeartRateChallenge;User ID=tangledbootlace;Password=MarryHelen2020!");
-            //SqlCommand sqlCmd = new SqlCommand("SELECT * FROM [tbl_Leaderboard] ORDER BY [Total Points] DESC", sqlCon);
-
-            //sqlCon.Open();
-            //SqlDataReader reader = sqlCmd.ExecuteReader();
-            //gvLeaderboard.DataSource = reader;
-            //gvLeaderboard.DataBind();
-            //sqlCon.Close();
         }
     }
 }
