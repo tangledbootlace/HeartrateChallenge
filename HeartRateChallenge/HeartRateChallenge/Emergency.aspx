@@ -7,5 +7,4 @@
         <p>Heart Rate Challenge is not responsible for any injuries sustained through participation in this competition.</p>
         <p>The Heart Rate Challenge competition is purely for entertainment and motivation purposes only. Unhealthy obsession and fixation on the Heart Rate Point System is not advised.</p>
     </div>
-    <div>
 </asp:Content>
