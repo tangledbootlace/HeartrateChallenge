@@ -27,7 +27,7 @@ namespace HeartRateChallenge
         {
             //TODO: Check for proper competitorID or make competitorID control a dropdown
             string FileName = System.IO.Path.GetFileName(FileInput.PostedFile.FileName);
-            if (int.TryParse(txtCompetitorID.Text, out var id))
+            if (int.TryParse(ddlCompetitorName.SelectedValue, out var id))
             {
                 if (FileName.EndsWith(".zip"))
                 {
@@ -47,6 +47,8 @@ namespace HeartRateChallenge
 
                         DataTable dtHeartRateZones = new DataTable();
                         dtHeartRateZones = GetHeartRateZones();
+                        DataTable dtPointsPerMinute = new DataTable();
+                        dtPointsPerMinute = GetPointsPerMinute();
 
                         int heartrate; //probably make class for this
                         int TotalPoints = 0;
@@ -119,11 +121,11 @@ namespace HeartRateChallenge
                                         Range4Minutes = (Range4Seconds / 60);
                                         Range5Minutes = (Range5Seconds / 60);
 
-                                        Range1Points = (Range1Minutes * 1);
-                                        Range2Points = (Range2Minutes * 2);
-                                        Range3Points = (Range3Minutes * 4);
-                                        Range4Points = (Range4Minutes * 6);
-                                        Range5Points = (Range5Minutes * 9);
+                                        Range1Points = Range1Minutes * ((int)dtPointsPerMinute.AsEnumerable().Where(x => x.Field<int>("HeartRateZone").Equals(1)).FirstOrDefault()["Points"]);
+                                        Range2Points = Range2Minutes * ((int)dtPointsPerMinute.AsEnumerable().Where(x => x.Field<int>("HeartRateZone").Equals(2)).FirstOrDefault()["Points"]);
+                                        Range3Points = Range3Minutes * ((int)dtPointsPerMinute.AsEnumerable().Where(x => x.Field<int>("HeartRateZone").Equals(3)).FirstOrDefault()["Points"]);
+                                        Range4Points = Range4Minutes * ((int)dtPointsPerMinute.AsEnumerable().Where(x => x.Field<int>("HeartRateZone").Equals(4)).FirstOrDefault()["Points"]);
+                                        Range5Points = Range5Minutes * ((int)dtPointsPerMinute.AsEnumerable().Where(x => x.Field<int>("HeartRateZone").Equals(5)).FirstOrDefault()["Points"]);
 
                                         TotalPoints += (Range1Points + Range2Points + Range3Points + Range4Points + Range5Points);
 
@@ -162,7 +164,7 @@ namespace HeartRateChallenge
             DataTable dt = new DataTable();
             SqlConnection sqlCon = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["connStr"].ConnectionString);
             SqlCommand sqlCmd = new SqlCommand($"SELECT * FROM [dbo].[tbl_CompetitorHeartRateZones] WHERE [CompetitorID] = @CompetitorID", sqlCon);
-            sqlCmd.Parameters.AddWithValue("@CompetitorID", txtCompetitorID.Text);
+            sqlCmd.Parameters.AddWithValue("@CompetitorID", ddlCompetitorName.SelectedValue);
 
             try
             {
@@ -180,12 +182,35 @@ namespace HeartRateChallenge
             return dt;
         }
 
+        protected DataTable GetPointsPerMinute()
+        {
+            DataTable dt = new DataTable();
+            SqlConnection sqlCon = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["connStr"].ConnectionString);
+            SqlCommand sqlCmd = new SqlCommand($"SELECT * FROM [dbo].[tbl_PointsPerMinute]", sqlCon);
+
+            try
+            {
+                sqlCon.Open();
+                using (SqlDataAdapter a = new SqlDataAdapter(sqlCmd))
+                {
+                    a.Fill(dt);
+                }
+                sqlCon.Close();
+            }
+            catch (Exception ex)
+            {
+                Response.Write("Error: " + ex.Message);
+            }
+            return dt;
+
+        }
+
         protected void AddTotalPoints(int TP)
         {
             SqlConnection sqlCon = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["connStr"].ConnectionString);
             SqlCommand sqlCmd = new SqlCommand($"UPDATE [tbl_Leaderboard] SET [TotalPoints] = [TotalPoints] + @TotalPoints WHERE [CompetitorID] = @CompetitorID", sqlCon);
             sqlCmd.Parameters.AddWithValue("@TotalPoints", TP);
-            sqlCmd.Parameters.AddWithValue("@CompetitorID", txtCompetitorID.Text);
+            sqlCmd.Parameters.AddWithValue("@CompetitorID", ddlCompetitorName.SelectedValue);
 
             try
             {
@@ -203,7 +228,7 @@ namespace HeartRateChallenge
         {
             SqlConnection sqlCon = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["connStr"].ConnectionString);
             SqlCommand sqlCmd = new SqlCommand($"INSERT INTO [tbl_UploadHistory] (CompetitorID, FileName, UploadDate) VALUES (@CompetitorID, @FileName, @UploadDate)", sqlCon);
-            sqlCmd.Parameters.AddWithValue("@CompetitorID", int.Parse(txtCompetitorID.Text));
+            sqlCmd.Parameters.AddWithValue("@CompetitorID", int.Parse(ddlCompetitorName.SelectedValue));
             sqlCmd.Parameters.AddWithValue("@FileName", FileName);
             sqlCmd.Parameters.AddWithValue("@UploadDate", DateTime.Now);
 

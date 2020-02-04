@@ -13,31 +13,13 @@ namespace HeartRateChallenge {
     public partial class About {
         
         /// <summary>
-        /// lblCompetitorID control.
+        /// ddlCompetitorName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblCompetitorID;
-        
-        /// <summary>
-        /// txtCompetitorID control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtCompetitorID;
-        
-        /// <summary>
-        /// txtCompetitorIDRequiredValidator control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator txtCompetitorIDRequiredValidator;
+        protected global::System.Web.UI.WebControls.DropDownList ddlCompetitorName;
         
         /// <summary>
         /// lblUpload control.

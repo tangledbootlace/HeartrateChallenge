@@ -22,11 +22,13 @@
         <h1><%: Title %></h1>
         <p class="lead">Use this page to upload Heart Rate Data from .zip file.</p>
         <img class="img-responsive center-block" src="https://media1.tenor.com/images/73db9b409372e6d759f08f51bf114945/tenor.gif?itemid=15734436" alt="gif image"  />
-    </div>    
+    </div>       
     <div>
-        <asp:Label ID="lblCompetitorID" runat="server" Text="Competitor ID:" />
-        <asp:TextBox ID="txtCompetitorID" Width="50px" CssClass="form-control" runat="server" />
-        <asp:RequiredFieldValidator runat="server" ID="txtCompetitorIDRequiredValidator" ControlToValidate="txtCompetitorID" ErrorMessage="CompetitorID may not be empty."/>
+        <asp:DropDownList ID="ddlCompetitorName" runat="server">
+            <asp:ListItem Value="1" Text="Blake" Selected="True" />
+            <asp:ListItem Value="2" Text="Kyle" />
+            <asp:ListItem Value="3" Text="Liam" />
+        </asp:DropDownList>
     </div>
     <br />
     <asp:Label ID="lblUpload" Class="custom-file-label" runat="server" Text="Upload .Zip File:" />

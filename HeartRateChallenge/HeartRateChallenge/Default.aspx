@@ -37,7 +37,7 @@
         <div class="col-md-4">
             <h3>Download Your Heartrate Data from Flow-Exporter:</h3>
             <p>
-                Export your heartrate data files over the past week as zipped .csv files from "Flow-Exporter" website.
+                Export your heartrate data files over a range of time as zipped .csv files from "Flow-Exporter" website.
             </p>
             <p>
                 <a class="btn btn-default" href="https://flow-exporter.ddns.net/" target="_blank">Flow-Exporter &raquo;</a>
