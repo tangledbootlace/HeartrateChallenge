@@ -11,13 +11,36 @@
         <p class="lead" style="text-align: center;">Current Leaderboard Standings:</p>
     </div>
     <div>
-        <asp:GridView ID="gvLeaderboard" CssClass="table table-responsive table-striped table-hover" HeaderStyle-BackColor="#343A40" HeaderStyle-ForeColor="White" HeaderStyle-CssClass="thead-dark" runat="server" AutoGenerateColumns="false">
+        <asp:GridView ID="gvLeaderboard" DataSourceID="sdsLeaderboard" CssClass="table table-responsive table-striped table-hover" HeaderStyle-BackColor="#343A40" HeaderStyle-ForeColor="White" HeaderStyle-CssClass="thead-dark" runat="server" AutoGenerateColumns="false">
             <Columns>
                 <asp:BoundField DataField="Rank" HeaderText="Rank" ItemStyle-Width="33%" ItemStyle-CssClass="table-responsive" />
                 <asp:BoundField DataField="Name" HeaderText="Name" ItemStyle-Width="33%" ItemStyle-CssClass="table-responsive"/>
                 <asp:BoundField DataField="TotalPoints" HeaderText="Total Points" ItemStyle-CssClass="table-responsive" />
             </Columns>
         </asp:GridView>
+        <asp:SqlDataSource ID="sdsLeaderboard" runat="server"
+            ConnectionString="<%$ ConnectionStrings:connStr %>"
+            SelectCommand="dbo.sp_SelectLeaderboard"
+            SelectCommandType="StoredProcedure">
+        </asp:SqlDataSource>
+    </div>
+    <br />
+    <div>
+        <p class="lead" style="text-align: center;">Workout Statistics:</p>
+    </div>
+    <div>
+        <asp:GridView ID="gvStatistics" DataSourceID="sdsStatistics" CssClass="table table-responsive table-striped table-hover" HeaderStyle-BackColor="#343A40" HeaderStyle-ForeColor="White" HeaderStyle-CssClass="thead-dark" runat="server" AutoGenerateColumns="false">
+            <Columns>
+                <asp:BoundField DataField="Name" HeaderText="Name" ItemStyle-Width="33%" ItemStyle-CssClass="table-responsive" />
+                <asp:BoundField DataField="LastWorkout" HeaderText="Last Workout Score" ItemStyle-Width="33%" ItemStyle-CssClass="table-responsive"/>
+                <asp:BoundField DataField="HighestWorkout" HeaderText="Highest Workout Score" ItemStyle-Width="33%" ItemStyle-CssClass="table-responsive"/>
+            </Columns>
+        </asp:GridView>    
+        <asp:SqlDataSource ID="sdsStatistics" runat="server"
+            ConnectionString="<%$ ConnectionStrings:connStr %>"
+            SelectCommand="dbo.sp_SelectWorkoutData"
+            SelectCommandType="StoredProcedure">
+        </asp:SqlDataSource>
     </div>
     <br />
     <br />

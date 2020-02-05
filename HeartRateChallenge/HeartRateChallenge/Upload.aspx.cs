@@ -139,7 +139,7 @@ namespace HeartRateChallenge
                         }
                         ////Write final total
                         AddTotalPoints(TotalPoints);
-                        RecordFileName(FileName);
+                        RecordFileName(FileName, TotalPoints);
 
                         //Delete CSV from Server Data
                         File.Delete(SaveLocation);
@@ -224,13 +224,14 @@ namespace HeartRateChallenge
             }
         }
 
-        protected void RecordFileName(string FileName)
+        protected void RecordFileName(string FileName, int TP)
         {
             SqlConnection sqlCon = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["connStr"].ConnectionString);
-            SqlCommand sqlCmd = new SqlCommand($"INSERT INTO [tbl_UploadHistory] (CompetitorID, FileName, UploadDate) VALUES (@CompetitorID, @FileName, @UploadDate)", sqlCon);
+            SqlCommand sqlCmd = new SqlCommand($"INSERT INTO [tbl_UploadHistory] (CompetitorID, FileName, UploadDate, PointChange) VALUES (@CompetitorID, @FileName, @UploadDate, @TotalPoints)", sqlCon);
             sqlCmd.Parameters.AddWithValue("@CompetitorID", int.Parse(ddlCompetitorName.SelectedValue));
             sqlCmd.Parameters.AddWithValue("@FileName", FileName);
             sqlCmd.Parameters.AddWithValue("@UploadDate", DateTime.Now);
+            sqlCmd.Parameters.AddWithValue("@TotalPoints", TP);
 
             try
             {
