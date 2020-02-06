@@ -17,10 +17,21 @@ namespace HeartRateChallenge
 
         protected void btnSubmit_Click(object sender, EventArgs e)
         {
-            DataTable dtHeartRateZones = new DataTable();
-            dtHeartRateZones = GetHeartRateZones();
+            if (cbConfirm.Checked)
+            {
+                lblError.Visible = false;
+                DataTable dtHeartRateZones = new DataTable();
+                dtHeartRateZones = GetHeartRateZones();
             
-            ProcessZip();
+                ProcessZip();
+            }
+            else
+            {                
+                imgError.Visible = true;
+                lblError.Text = "You fool!<br/>You fell victim to one of the classic blunders!<br/>You did not confirm that you know what your own name is!";
+                lblError.Visible = true;
+            }
+            
         }
         
         protected void ProcessZip()
@@ -163,7 +174,12 @@ namespace HeartRateChallenge
         {
             DataTable dt = new DataTable();
             SqlConnection sqlCon = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["connStr"].ConnectionString);
-            SqlCommand sqlCmd = new SqlCommand($"SELECT * FROM [dbo].[tbl_CompetitorHeartRateZones] WHERE [CompetitorID] = @CompetitorID", sqlCon);
+            string strSP = "dbo.sp_SelectHeartRateZones";
+            SqlCommand sqlCmd = new SqlCommand(strSP, sqlCon)
+            {
+                CommandType = CommandType.StoredProcedure,
+                CommandTimeout = 0
+            };
             sqlCmd.Parameters.AddWithValue("@CompetitorID", ddlCompetitorName.SelectedValue);
 
             try
@@ -186,7 +202,12 @@ namespace HeartRateChallenge
         {
             DataTable dt = new DataTable();
             SqlConnection sqlCon = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["connStr"].ConnectionString);
-            SqlCommand sqlCmd = new SqlCommand($"SELECT * FROM [dbo].[tbl_PointsPerMinute]", sqlCon);
+            string strSP = "dbo.sp_SelectPointsPerMinute";
+            SqlCommand sqlCmd = new SqlCommand(strSP, sqlCon)
+            {
+                CommandType = CommandType.StoredProcedure,
+                CommandTimeout = 0
+            };
 
             try
             {
@@ -208,7 +229,12 @@ namespace HeartRateChallenge
         protected void AddTotalPoints(int TP)
         {
             SqlConnection sqlCon = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["connStr"].ConnectionString);
-            SqlCommand sqlCmd = new SqlCommand($"UPDATE [tbl_Leaderboard] SET [TotalPoints] = [TotalPoints] + @TotalPoints WHERE [CompetitorID] = @CompetitorID", sqlCon);
+            string strSP = "dbo.sp_UpdateTotalPoints";
+            SqlCommand sqlCmd = new SqlCommand(strSP, sqlCon)
+            {
+                CommandType = CommandType.StoredProcedure,
+                CommandTimeout = 0
+            };
             sqlCmd.Parameters.AddWithValue("@TotalPoints", TP);
             sqlCmd.Parameters.AddWithValue("@CompetitorID", ddlCompetitorName.SelectedValue);
 
@@ -227,7 +253,12 @@ namespace HeartRateChallenge
         protected void RecordFileName(string FileName, int TP)
         {
             SqlConnection sqlCon = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["connStr"].ConnectionString);
-            SqlCommand sqlCmd = new SqlCommand($"INSERT INTO [tbl_UploadHistory] (CompetitorID, FileName, UploadDate, PointChange) VALUES (@CompetitorID, @FileName, @UploadDate, @TotalPoints)", sqlCon);
+            string strSP = "dbo.sp_InsertUploadHistory";
+            SqlCommand sqlCmd = new SqlCommand(strSP, sqlCon)
+            {
+                CommandType = CommandType.StoredProcedure,
+                CommandTimeout = 0
+            };
             sqlCmd.Parameters.AddWithValue("@CompetitorID", int.Parse(ddlCompetitorName.SelectedValue));
             sqlCmd.Parameters.AddWithValue("@FileName", FileName);
             sqlCmd.Parameters.AddWithValue("@UploadDate", DateTime.Now);
@@ -250,7 +281,12 @@ namespace HeartRateChallenge
             bool Record = false;
             string Exists = "";
             SqlConnection sqlCon = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["connStr"].ConnectionString);
-            SqlCommand sqlCmd = new SqlCommand($"SELECT [FileName] FROM [tbl_UploadHistory] WHERE [CompetitorID] = @CompetitorID AND [FileName] = @FileName", sqlCon);
+            string strSP = "dbo.sp_ValidateUploadHistory";
+            SqlCommand sqlCmd = new SqlCommand(strSP, sqlCon)
+            {
+                CommandType = CommandType.StoredProcedure,
+                CommandTimeout = 0
+            };
             sqlCmd.Parameters.AddWithValue("@CompetitorID", CompetitorID);
             sqlCmd.Parameters.AddWithValue("@FileName", FileName);
 

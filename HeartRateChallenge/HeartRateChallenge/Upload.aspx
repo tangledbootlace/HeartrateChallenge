@@ -16,19 +16,56 @@
             alert("You have already uploaded this file and received credit. Please upload new heart rate data.")
         }
 
-        </script>
+    </script>
+    <style>
+        .checkboxMargin {
+            margin-right: 10px;
+        }
+
+        .rainbow-text {
+            background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+        }
+
+        .divbackground{
+            text-align:center;
+        }
+
+        .error { 
+            background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+            -webkit-background-clip: text;
+            -webkit-background-clip: text;
+            -moz-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-left: 30px;
+            font-family: 'Comic Sans MS';
+            font-weight: bold;
+            text-align: center;
+            font-size: 52px;
+        }
+    </style>
 
      <div class="jumbotron" style="text-align: center;">
         <h1><%: Title %></h1>
         <p class="lead">Use this page to upload Heart Rate Data from .zip file.</p>
-        <img class="img-responsive center-block" src="https://media1.tenor.com/images/73db9b409372e6d759f08f51bf114945/tenor.gif?itemid=15734436" alt="gif image"  />
-    </div>       
+        <img class="img-responsive center-block" height="500px" width="750px" src="https://i0.wp.com/onemansblog.com/wp-content/uploads/2010/06/Penis-Ad-Small.jpg?fit=500%2C312&ssl=1" alt="gif image"  />
+    </div>   
     <div>
-        <asp:DropDownList ID="ddlCompetitorName" runat="server">
+        <asp:DropDownList ID="ddlCompetitorName" runat="server" CssClass="checkboxMargin">
             <asp:ListItem Value="1" Text="Blake" Selected="True" />
             <asp:ListItem Value="2" Text="Kyle" />
             <asp:ListItem Value="3" Text="Liam" />
         </asp:DropDownList>
+        
+        <asp:CheckBox ID="cbConfirm" runat="server" Checked="false" />        
+        <asp:Label ID="lblConfirm" runat="server" Text="I affirm that I have selected my own name from the dropdown list so that Blake does not have to edit the database to fix my mistake." />
+    </div>
+    <br />
+    <div>
+        <asp:Image ID="imgError" runat="server" class="img-responsive center-block" Height="400px" Width="600px" src="https://media.giphy.com/media/l2YWoFU3Bmum4yyLC/giphy.gif" alt="inconceivable" Visible="false"/>
+    </div>
+    <div class="divbackground">
+        <asp:Label ID="lblError" CssClass="error" Visible="false" runat="server" />        
     </div>
     <br />
     <asp:Label ID="lblUpload" Class="custom-file-label" runat="server" Text="Upload .Zip File:" />

@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.960
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeartRateChallenge", "HeartRateChallenge\HeartRateChallenge.csproj", "{86E6934F-0690-4259-BCC9-BAAEA9FC6D44}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManualCalculator", "ManualCalculator\ManualCalculator.csproj", "{AF66E34E-5378-4A80-90D1-CF1F841C9CEC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{86E6934F-0690-4259-BCC9-BAAEA9FC6D44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86E6934F-0690-4259-BCC9-BAAEA9FC6D44}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86E6934F-0690-4259-BCC9-BAAEA9FC6D44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF66E34E-5378-4A80-90D1-CF1F841C9CEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF66E34E-5378-4A80-90D1-CF1F841C9CEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF66E34E-5378-4A80-90D1-CF1F841C9CEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF66E34E-5378-4A80-90D1-CF1F841C9CEC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
