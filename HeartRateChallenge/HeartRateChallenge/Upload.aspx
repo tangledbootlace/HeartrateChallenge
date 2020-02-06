@@ -48,7 +48,7 @@
      <div class="jumbotron" style="text-align: center;">
         <h1><%: Title %></h1>
         <p class="lead">Use this page to upload Heart Rate Data from .zip file.</p>
-        <img class="img-responsive center-block" height="500px" width="750px" src="https://i0.wp.com/onemansblog.com/wp-content/uploads/2010/06/Penis-Ad-Small.jpg?fit=500%2C312&ssl=1" alt="gif image"  />
+        <img class="img-responsive center-block" height="500px" width="750px" src="https://sites.psu.edu/siowfa15/wp-content/uploads/sites/29639/2015/10/Broken-lift.jpg" alt="gif image"  />
     </div>   
     <div>
         <asp:DropDownList ID="ddlCompetitorName" runat="server" CssClass="checkboxMargin">
