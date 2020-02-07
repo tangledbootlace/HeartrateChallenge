@@ -9,9 +9,9 @@ Participants record their heart rate during a workout by wearing a Polar H10 hea
 <br>
 ##Heart Rate Zones
 
-Zones are based on the participant's maximum heart rate.
-90%-100%: 9 points per minute
-80%-89.9%: 7 points per minute
-70%-79%: 5 points per minute
-60%-69.9%: 3 points per minute
-50%-59.9%: 1 point per minute
+Zones are based on the participant's maximum heart rate.<br>
+90%-100%: 9 points per minute<br>
+80%-89.9%: 7 points per minute<br>
+70%-79%: 5 points per minute<br>
+60%-69.9%: 3 points per minute<br>
+50%-59.9%: 1 point per minute<br>
