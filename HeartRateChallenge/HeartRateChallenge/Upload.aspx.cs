@@ -36,7 +36,7 @@ namespace HeartRateChallenge
         
         protected void ProcessZip()
         {
-            //TODO: Check for proper competitorID or make competitorID control a dropdown
+            //TODO: Add functionality to just upload .csv
             string FileName = System.IO.Path.GetFileName(FileInput.PostedFile.FileName);
             if (int.TryParse(ddlCompetitorName.SelectedValue, out var id))
             {
@@ -79,16 +79,15 @@ namespace HeartRateChallenge
                         {
                             foreach (ZipArchiveEntry entry in archive.Entries)
                             {
-                                int Range1Seconds, Range2Seconds, Range3Seconds, Range4Seconds, Range5Seconds, Range1Minutes, Range2Minutes, Range3Minutes, Range4Minutes, Range5Minutes, Range1Points, Range2Points, Range3Points, Range4Points, Range5Points;
-
+                                int Range1Seconds, Range2Seconds, Range3Seconds, Range4Seconds, Range5Seconds, Range1Minutes, Range2Minutes, Range3Minutes, Range4Minutes, Range5Minutes, Range1Points, Range2Points, Range3Points, Range4Points, Range5Points, PointsToAdd;
 
                                 Range1Seconds = Range2Seconds = Range3Seconds = Range4Seconds = Range5Seconds = 0; //initialize seconds to 0
 
                                 Range1Minutes = Range2Minutes = Range3Minutes = Range4Minutes = Range5Minutes = 0;
 
-                                Range1Points = Range2Points = Range3Points = Range4Points = Range5Points = 0;
+                                Range1Points = Range2Points = Range3Points = Range4Points = Range5Points = PointsToAdd = 0;
 
-                                if (entry.FullName.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
+                                if (entry.FullName.EndsWith(".csv", StringComparison.OrdinalIgnoreCase)) //TODO: Make class that executes for every csv in zip or for one csv upload
                                 {
                                     try
                                     {
@@ -138,7 +137,10 @@ namespace HeartRateChallenge
                                         Range4Points = Range4Minutes * ((int)dtPointsPerMinute.AsEnumerable().Where(x => x.Field<int>("HeartRateZone").Equals(4)).FirstOrDefault()["Points"]);
                                         Range5Points = Range5Minutes * ((int)dtPointsPerMinute.AsEnumerable().Where(x => x.Field<int>("HeartRateZone").Equals(5)).FirstOrDefault()["Points"]);
 
-                                        TotalPoints += (Range1Points + Range2Points + Range3Points + Range4Points + Range5Points);
+                                        PointsToAdd = (Range1Points + Range2Points + Range3Points + Range4Points + Range5Points);
+                                        TotalPoints += PointsToAdd;
+
+                                        RecordFileName(entry.Name, PointsToAdd);
 
                                     }
                                     catch (Exception ex)
@@ -150,7 +152,7 @@ namespace HeartRateChallenge
                         }
                         ////Write final total
                         AddTotalPoints(TotalPoints);
-                        RecordFileName(FileName, TotalPoints);
+                       //RecordFileName(FileName, TotalPoints);
 
                         //Delete CSV from Server Data
                         File.Delete(SaveLocation);
@@ -250,7 +252,7 @@ namespace HeartRateChallenge
             }
         }
 
-        protected void RecordFileName(string FileName, int TP)
+        protected void RecordFileName(string FileName, int PointChange)
         {
             SqlConnection sqlCon = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["connStr"].ConnectionString);
             string strSP = "dbo.sp_InsertUploadHistory";
@@ -262,7 +264,7 @@ namespace HeartRateChallenge
             sqlCmd.Parameters.AddWithValue("@CompetitorID", int.Parse(ddlCompetitorName.SelectedValue));
             sqlCmd.Parameters.AddWithValue("@FileName", FileName);
             sqlCmd.Parameters.AddWithValue("@UploadDate", DateTime.Now);
-            sqlCmd.Parameters.AddWithValue("@TotalPoints", TP);
+            sqlCmd.Parameters.AddWithValue("@PointChange", PointChange);
 
             try
             {
