@@ -48,8 +48,7 @@ namespace HeartRateChallenge
 
                         try
                         {
-                            FileInput.PostedFile.SaveAs(SaveLocation);
-                            Response.Write("The file has been uploaded.");
+                            FileInput.PostedFile.SaveAs(SaveLocation);                            
                         }
                         catch (Exception ex)
                         {
@@ -79,7 +78,8 @@ namespace HeartRateChallenge
                         {
                             foreach (ZipArchiveEntry entry in archive.Entries)
                             {
-                                int Range1Seconds, Range2Seconds, Range3Seconds, Range4Seconds, Range5Seconds, Range1Minutes, Range2Minutes, Range3Minutes, Range4Minutes, Range5Minutes, Range1Points, Range2Points, Range3Points, Range4Points, Range5Points, PointsToAdd;
+                                int Range1Seconds, Range2Seconds, Range3Seconds, Range4Seconds, Range5Seconds, PointsToAdd;
+                                decimal Range1Minutes, Range2Minutes, Range3Minutes, Range4Minutes, Range5Minutes, Range1Points, Range2Points, Range3Points, Range4Points, Range5Points;
 
                                 Range1Seconds = Range2Seconds = Range3Seconds = Range4Seconds = Range5Seconds = 0; //initialize seconds to 0
 
@@ -87,7 +87,7 @@ namespace HeartRateChallenge
 
                                 Range1Points = Range2Points = Range3Points = Range4Points = Range5Points = PointsToAdd = 0;
 
-                                if (entry.FullName.EndsWith(".csv", StringComparison.OrdinalIgnoreCase)) //TODO: Make class that executes for every csv in zip or for one csv upload
+                                if (entry.FullName.EndsWith(".csv", StringComparison.OrdinalIgnoreCase)) //TODO: Make class that executes for every csv in zip OR for one csv upload
                                 {
                                     try
                                     {
@@ -112,24 +112,24 @@ namespace HeartRateChallenge
                                                 heartrate = int.Parse(dr[2].ToString());
                                                 if (heartrate >= UserRange1LB && heartrate < UserRange1UB)
                                                     Range1Seconds++;
-                                                else if (heartrate >= UserRange2LB && heartrate < UserRange2UB)
+                                                else if (heartrate >= UserRange2LB && heartrate <= UserRange2UB)
                                                     Range2Seconds++;
-                                                else if (heartrate >= UserRange3LB && heartrate < UserRange3UB)
+                                                else if (heartrate >= UserRange3LB && heartrate <= UserRange3UB)
                                                     Range3Seconds++;
-                                                else if (heartrate >= UserRange4LB && heartrate < UserRange4UB)
+                                                else if (heartrate >= UserRange4LB && heartrate <= UserRange4UB)
                                                     Range4Seconds++;
-                                                else if (heartrate >= UserRange5LB && heartrate < UserRange5UB)
+                                                else if (heartrate >= UserRange5LB && heartrate <= UserRange5UB)
                                                     Range5Seconds++;
                                                 dt.Rows.Add(dr);
                                             }
                                         }
 
                                         //all done with csv, calculate points.
-                                        Range1Minutes = (Range1Seconds / 60);
-                                        Range2Minutes = (Range2Seconds / 60);
-                                        Range3Minutes = (Range3Seconds / 60);
-                                        Range4Minutes = (Range4Seconds / 60);
-                                        Range5Minutes = (Range5Seconds / 60);
+                                        Range1Minutes = decimal.Divide(Range1Seconds, 60);
+                                        Range2Minutes = decimal.Divide(Range2Seconds, 60);
+                                        Range3Minutes = decimal.Divide(Range3Seconds, 60);
+                                        Range4Minutes = decimal.Divide(Range4Seconds, 60);
+                                        Range5Minutes = decimal.Divide(Range5Seconds, 60);
 
                                         Range1Points = Range1Minutes * ((int)dtPointsPerMinute.AsEnumerable().Where(x => x.Field<int>("HeartRateZone").Equals(1)).FirstOrDefault()["Points"]);
                                         Range2Points = Range2Minutes * ((int)dtPointsPerMinute.AsEnumerable().Where(x => x.Field<int>("HeartRateZone").Equals(2)).FirstOrDefault()["Points"]);
@@ -137,10 +137,11 @@ namespace HeartRateChallenge
                                         Range4Points = Range4Minutes * ((int)dtPointsPerMinute.AsEnumerable().Where(x => x.Field<int>("HeartRateZone").Equals(4)).FirstOrDefault()["Points"]);
                                         Range5Points = Range5Minutes * ((int)dtPointsPerMinute.AsEnumerable().Where(x => x.Field<int>("HeartRateZone").Equals(5)).FirstOrDefault()["Points"]);
 
-                                        PointsToAdd = (Range1Points + Range2Points + Range3Points + Range4Points + Range5Points);
-                                        TotalPoints += PointsToAdd;
+                                        PointsToAdd = int.Parse(Math.Round(Range1Points + Range2Points + Range3Points + Range4Points + Range5Points).ToString());
+                                        TotalPoints += PointsToAdd;                                        
 
                                         RecordFileName(entry.Name, PointsToAdd);
+                                        Response.Write($"The file has been uploaded. {PointsToAdd.ToString()} points have been added to your total score");
 
                                     }
                                     catch (Exception ex)
@@ -151,8 +152,8 @@ namespace HeartRateChallenge
                             }
                         }
                         ////Write final total
-                        AddTotalPoints(TotalPoints);
-                       //RecordFileName(FileName, TotalPoints);
+                        UpdateTotalPoints();
+                        //RecordFileName(FileName, TotalPoints);
 
                         //Delete CSV from Server Data
                         File.Delete(SaveLocation);
@@ -228,7 +229,7 @@ namespace HeartRateChallenge
 
         }
 
-        protected void AddTotalPoints(int TP)
+        protected void UpdateTotalPoints()
         {
             SqlConnection sqlCon = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["connStr"].ConnectionString);
             string strSP = "dbo.sp_UpdateTotalPoints";
@@ -237,7 +238,6 @@ namespace HeartRateChallenge
                 CommandType = CommandType.StoredProcedure,
                 CommandTimeout = 0
             };
-            sqlCmd.Parameters.AddWithValue("@TotalPoints", TP);
             sqlCmd.Parameters.AddWithValue("@CompetitorID", ddlCompetitorName.SelectedValue);
 
             try

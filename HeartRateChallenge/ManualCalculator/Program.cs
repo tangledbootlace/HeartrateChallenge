@@ -69,7 +69,8 @@ namespace ManualCalculator
             {
                 foreach (ZipArchiveEntry entry in archive.Entries)
                 {
-                    int Range1Seconds, Range2Seconds, Range3Seconds, Range4Seconds, Range5Seconds, Range1Minutes, Range2Minutes, Range3Minutes, Range4Minutes, Range5Minutes, Range1Points, Range2Points, Range3Points, Range4Points, Range5Points;
+                    int Range1Seconds, Range2Seconds, Range3Seconds, Range4Seconds, Range5Seconds;
+                    decimal Range1Minutes, Range2Minutes, Range3Minutes, Range4Minutes, Range5Minutes, Range1Points, Range2Points, Range3Points, Range4Points, Range5Points;
 
 
                     Range1Seconds = Range2Seconds = Range3Seconds = Range4Seconds = Range5Seconds = 0; //initialize seconds to 0
@@ -101,26 +102,26 @@ namespace ManualCalculator
                                         dr[i] = rows[i];
                                     }
                                     heartrate = int.Parse(dr[2].ToString());
-                                    if (heartrate >= UserRange1LB && heartrate < UserRange1UB)
+                                    if (heartrate >= UserRange1LB && heartrate <= UserRange1UB)
                                         Range1Seconds++;
-                                    else if (heartrate >= UserRange2LB && heartrate < UserRange2UB)
+                                    else if (heartrate >= UserRange2LB && heartrate <= UserRange2UB)
                                         Range2Seconds++;
-                                    else if (heartrate >= UserRange3LB && heartrate < UserRange3UB)
+                                    else if (heartrate >= UserRange3LB && heartrate <= UserRange3UB)
                                         Range3Seconds++;
-                                    else if (heartrate >= UserRange4LB && heartrate < UserRange4UB)
+                                    else if (heartrate >= UserRange4LB && heartrate <= UserRange4UB)
                                         Range4Seconds++;
-                                    else if (heartrate >= UserRange5LB && heartrate < UserRange5UB)
+                                    else if (heartrate >= UserRange5LB && heartrate <= UserRange5UB)
                                         Range5Seconds++;
                                     dt.Rows.Add(dr);
                                 }
                             }
 
                             //all done with csv, calculate points.
-                            Range1Minutes = (Range1Seconds / 60);
-                            Range2Minutes = (Range2Seconds / 60);
-                            Range3Minutes = (Range3Seconds / 60);
-                            Range4Minutes = (Range4Seconds / 60);
-                            Range5Minutes = (Range5Seconds / 60);
+                            Range1Minutes = decimal.Divide(Range1Seconds, 60);
+                            Range2Minutes = decimal.Divide(Range2Seconds, 60);
+                            Range3Minutes = decimal.Divide(Range3Seconds, 60);
+                            Range4Minutes = decimal.Divide(Range4Seconds, 60);
+                            Range5Minutes = decimal.Divide(Range5Seconds, 60);
 
                             Range1Points = Range1Minutes * ((int)dtPointsPerMinute.AsEnumerable().Where(x => x.Field<int>("HeartRateZone").Equals(1)).FirstOrDefault()["Points"]);
                             Range2Points = Range2Minutes * ((int)dtPointsPerMinute.AsEnumerable().Where(x => x.Field<int>("HeartRateZone").Equals(2)).FirstOrDefault()["Points"]);
@@ -128,7 +129,43 @@ namespace ManualCalculator
                             Range4Points = Range4Minutes * ((int)dtPointsPerMinute.AsEnumerable().Where(x => x.Field<int>("HeartRateZone").Equals(4)).FirstOrDefault()["Points"]);
                             Range5Points = Range5Minutes * ((int)dtPointsPerMinute.AsEnumerable().Where(x => x.Field<int>("HeartRateZone").Equals(5)).FirstOrDefault()["Points"]);
 
-                            TotalPoints += (Range1Points + Range2Points + Range3Points + Range4Points + Range5Points);
+                            TotalPoints += int.Parse(Math.Round(Range1Points + Range2Points + Range3Points + Range4Points + Range5Points).ToString());
+
+                            Console.WriteLine($"Heart Rate Zones:");
+                            Console.WriteLine($"1LB: {UserRange1LB}");
+                            Console.WriteLine($"1UB: {UserRange1UB}");
+                            Console.WriteLine($"2LB: {UserRange2LB}");
+                            Console.WriteLine($"2UB: {UserRange2UB}");
+                            Console.WriteLine($"3LB: {UserRange3LB}");
+                            Console.WriteLine($"3UB: {UserRange3UB}");
+                            Console.WriteLine($"4LB: {UserRange4LB}");
+                            Console.WriteLine($"4UB: {UserRange4UB}");
+                            Console.WriteLine($"5LB: {UserRange5LB}");
+                            Console.WriteLine($"5UB: {UserRange5UB}");
+                            Console.WriteLine();
+
+                            Console.WriteLine($"Seconds in Zone 1: {Range1Seconds}");
+                            Console.WriteLine($"Seconds in Zone 2: {Range2Seconds}");
+                            Console.WriteLine($"Seconds in Zone 3: {Range3Seconds}");
+                            Console.WriteLine($"Seconds in Zone 4: {Range4Seconds}");
+                            Console.WriteLine($"Seconds in Zone 5: {Range5Seconds}");
+                            Console.WriteLine();
+
+                            Console.WriteLine("Point Ranges (Points per Minute):");
+                            Console.WriteLine($"Zone 1: {((int)dtPointsPerMinute.AsEnumerable().Where(x => x.Field<int>("HeartRateZone").Equals(1)).FirstOrDefault()["Points"]).ToString()}");
+                            Console.WriteLine($"Zone 2: {((int)dtPointsPerMinute.AsEnumerable().Where(x => x.Field<int>("HeartRateZone").Equals(2)).FirstOrDefault()["Points"]).ToString()}");
+                            Console.WriteLine($"Zone 3: {((int)dtPointsPerMinute.AsEnumerable().Where(x => x.Field<int>("HeartRateZone").Equals(3)).FirstOrDefault()["Points"]).ToString()}");
+                            Console.WriteLine($"Zone 4: {((int)dtPointsPerMinute.AsEnumerable().Where(x => x.Field<int>("HeartRateZone").Equals(4)).FirstOrDefault()["Points"]).ToString()}");
+                            Console.WriteLine($"Zone 5: {((int)dtPointsPerMinute.AsEnumerable().Where(x => x.Field<int>("HeartRateZone").Equals(5)).FirstOrDefault()["Points"]).ToString()}");
+                            Console.WriteLine();
+
+                            Console.WriteLine($"Minutes in Zone 1: {Range1Minutes}");
+                            Console.WriteLine($"Minutes in Zone 2: {Range2Minutes}");
+                            Console.WriteLine($"Minutes in Zone 3: {Range3Minutes}");
+                            Console.WriteLine($"Minutes in Zone 4: {Range4Minutes}");
+                            Console.WriteLine($"Minutes in Zone 5: {Range5Minutes}");
+                            Console.WriteLine();
+
 
                             Console.WriteLine($"{entry.Name.ToString()} Calculated Points:");
                             Console.WriteLine($"Range 1 Points: {Range1Points.ToString()}");
