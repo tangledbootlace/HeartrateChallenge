@@ -109,8 +109,13 @@ namespace HeartRateChallenge
                                                 {
                                                     dr[i] = rows[i];
                                                 }
-                                                heartrate = int.Parse(dr[2].ToString());
-                                                if (heartrate >= UserRange1LB && heartrate < UserRange1UB)
+                                                if (int.TryParse(dr[2].ToString(), out var s))
+                                                    heartrate = s;
+                                                else
+                                                {
+                                                    heartrate = 0;
+                                                }
+                                                if (heartrate >= UserRange1LB && heartrate <= UserRange1UB)
                                                     Range1Seconds++;
                                                 else if (heartrate >= UserRange2LB && heartrate <= UserRange2UB)
                                                     Range2Seconds++;
@@ -141,18 +146,19 @@ namespace HeartRateChallenge
                                         TotalPoints += PointsToAdd;                                        
 
                                         RecordFileName(entry.Name, PointsToAdd);
-                                        Response.Write($"The file has been uploaded. {PointsToAdd.ToString()} points have been added to your total score");
+                                        
 
                                     }
                                     catch (Exception ex)
                                     {
-                                        Response.Write("Processing Error: " + ex.Message);
+                                        Response.Write("Processing Error: " + ex.Message + " ");
                                     }
                                 }
                             }
                         }
                         ////Write final total
                         UpdateTotalPoints();
+                        Response.Write($"The file has been uploaded. {TotalPoints.ToString()} points have been added to your total score.");
                         //RecordFileName(FileName, TotalPoints);
 
                         //Delete CSV from Server Data

@@ -101,7 +101,13 @@ namespace ManualCalculator
                                     {
                                         dr[i] = rows[i];
                                     }
-                                    heartrate = int.Parse(dr[2].ToString());
+                                    if (int.TryParse(dr[2].ToString(), out var s))
+                                        heartrate = s;
+                                    else
+                                    {
+                                        heartrate = 0;
+                                    }
+                                   
                                     if (heartrate >= UserRange1LB && heartrate <= UserRange1UB)
                                         Range1Seconds++;
                                     else if (heartrate >= UserRange2LB && heartrate <= UserRange2UB)
