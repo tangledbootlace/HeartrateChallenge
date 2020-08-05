@@ -20,9 +20,6 @@ namespace HeartRateChallenge
             if (cbConfirm.Checked)
             {
                 lblError.Visible = false;
-                DataTable dtHeartRateZones = new DataTable();
-                dtHeartRateZones = GetHeartRateZones();
-            
                 ProcessZip();
             }
             else
@@ -37,132 +34,137 @@ namespace HeartRateChallenge
         protected void ProcessZip()
         {
             //TODO: Add functionality to just upload .csv
-            string FileName = System.IO.Path.GetFileName(FileInput.PostedFile.FileName);
+            var fileName = Path.GetFileName(FileInput.PostedFile.FileName);
             if (int.TryParse(ddlCompetitorName.SelectedValue, out var id))
             {
-                if (FileName.EndsWith(".zip"))
+                if (fileName.EndsWith(".zip"))
                 {
-                    if (!CheckFileRecords(id, FileName))
+                    var saveLocation = Server.MapPath("~/App_Data/") + fileName;
+                    if (!CheckFileRecords(id, fileName))
                     {
-                        string SaveLocation = Server.MapPath("~/App_Data/") + FileName;
-
                         try
                         {
-                            FileInput.PostedFile.SaveAs(SaveLocation);                            
+                            FileInput.PostedFile.SaveAs(saveLocation);                            
                         }
                         catch (Exception ex)
                         {
                             Response.Write("Error: " + ex.Message);
                         }
 
-                        DataTable dtHeartRateZones = new DataTable();
-                        dtHeartRateZones = GetHeartRateZones();
-                        DataTable dtPointsPerMinute = new DataTable();
-                        dtPointsPerMinute = GetPointsPerMinute();
+                        var dtHeartRateZones = GetHeartRateZones();
+                        var dtPointsPerMinute = GetPointsPerMinute();
 
-                        int heartrate; //probably make class for this
-                        int TotalPoints = 0;
-                        var UserRange1LB = (int)dtHeartRateZones.AsEnumerable().Where(x => x.Field<int>("CompetitorID").Equals(id)).FirstOrDefault()["Zone1LowerBound"];
-                        var UserRange1UB = (int)dtHeartRateZones.AsEnumerable().Where(x => x.Field<int>("CompetitorID").Equals(id)).FirstOrDefault()["Zone1UpperBound"];
-                        var UserRange2LB = (int)dtHeartRateZones.AsEnumerable().Where(x => x.Field<int>("CompetitorID").Equals(id)).FirstOrDefault()["Zone2LowerBound"];
-                        var UserRange2UB = (int)dtHeartRateZones.AsEnumerable().Where(x => x.Field<int>("CompetitorID").Equals(id)).FirstOrDefault()["Zone2UpperBound"];
-                        var UserRange3LB = (int)dtHeartRateZones.AsEnumerable().Where(x => x.Field<int>("CompetitorID").Equals(id)).FirstOrDefault()["Zone3LowerBound"];
-                        var UserRange3UB = (int)dtHeartRateZones.AsEnumerable().Where(x => x.Field<int>("CompetitorID").Equals(id)).FirstOrDefault()["Zone3UpperBound"];
-                        var UserRange4LB = (int)dtHeartRateZones.AsEnumerable().Where(x => x.Field<int>("CompetitorID").Equals(id)).FirstOrDefault()["Zone4LowerBound"];
-                        var UserRange4UB = (int)dtHeartRateZones.AsEnumerable().Where(x => x.Field<int>("CompetitorID").Equals(id)).FirstOrDefault()["Zone4UpperBound"];
-                        var UserRange5LB = (int)dtHeartRateZones.AsEnumerable().Where(x => x.Field<int>("CompetitorID").Equals(id)).FirstOrDefault()["Zone5LowerBound"];
-                        var UserRange5UB = (int)dtHeartRateZones.AsEnumerable().Where(x => x.Field<int>("CompetitorID").Equals(id)).FirstOrDefault()["Zone5UpperBound"];
+                        var totalPoints = 0;
+                        var userRange1Lb =
+                            (int) dtHeartRateZones.AsEnumerable().FirstOrDefault(x =>
+                                DataRowExtensions.Field<int>(x, "CompetitorID").Equals(id))?["Zone1LowerBound"];
+                        var userRange1Ub =
+                            (int) dtHeartRateZones.AsEnumerable().FirstOrDefault(x =>
+                                DataRowExtensions.Field<int>(x, "CompetitorID").Equals(id))?["Zone1UpperBound"];
+                        var userRange2Lb =
+                            (int) dtHeartRateZones.AsEnumerable().FirstOrDefault(x =>
+                                DataRowExtensions.Field<int>(x, "CompetitorID").Equals(id))?["Zone2LowerBound"];
+                        var userRange2Ub =
+                            (int) dtHeartRateZones.AsEnumerable().FirstOrDefault(x =>
+                                DataRowExtensions.Field<int>(x, "CompetitorID").Equals(id))?["Zone2UpperBound"];
+                        var userRange3Lb =
+                            (int) dtHeartRateZones.AsEnumerable().FirstOrDefault(x =>
+                                DataRowExtensions.Field<int>(x, "CompetitorID").Equals(id))?["Zone3LowerBound"];
+                        var userRange3Ub =
+                            (int) dtHeartRateZones.AsEnumerable().FirstOrDefault(x =>
+                                DataRowExtensions.Field<int>(x, "CompetitorID").Equals(id))?["Zone3UpperBound"];
+                        var userRange4Lb =
+                            (int) dtHeartRateZones.AsEnumerable().FirstOrDefault(x =>
+                                DataRowExtensions.Field<int>(x, "CompetitorID").Equals(id))?["Zone4LowerBound"];
+                        var userRange4Ub =
+                            (int) dtHeartRateZones.AsEnumerable().FirstOrDefault(x =>
+                                DataRowExtensions.Field<int>(x, "CompetitorID").Equals(id))?["Zone4UpperBound"];
+                        var userRange5Lb =
+                            (int) dtHeartRateZones.AsEnumerable().FirstOrDefault(x =>
+                                DataRowExtensions.Field<int>(x, "CompetitorID").Equals(id))?["Zone5LowerBound"];
+                        var userRange5Ub =
+                            (int) dtHeartRateZones.AsEnumerable().FirstOrDefault(x =>
+                                DataRowExtensions.Field<int>(x, "CompetitorID").Equals(id))?["Zone5UpperBound"];
 
 
-                        using (ZipArchive archive = ZipFile.OpenRead(SaveLocation))
+                        using (var archive = ZipFile.OpenRead(saveLocation))
                         {
-                            foreach (ZipArchiveEntry entry in archive.Entries)
+                            foreach (var entry in archive.Entries)
                             {
-                                int Range1Seconds, Range2Seconds, Range3Seconds, Range4Seconds, Range5Seconds, PointsToAdd;
-                                decimal Range1Minutes, Range2Minutes, Range3Minutes, Range4Minutes, Range5Minutes, Range1Points, Range2Points, Range3Points, Range4Points, Range5Points;
+                                int range2Seconds, range3Seconds, range4Seconds, range5Seconds;
 
-                                Range1Seconds = Range2Seconds = Range3Seconds = Range4Seconds = Range5Seconds = 0; //initialize seconds to 0
+                                var range1Seconds = range2Seconds = range3Seconds = range4Seconds = range5Seconds = 0;
 
-                                Range1Minutes = Range2Minutes = Range3Minutes = Range4Minutes = Range5Minutes = 0;
-
-                                Range1Points = Range2Points = Range3Points = Range4Points = Range5Points = PointsToAdd = 0;
-
-                                if (entry.FullName.EndsWith(".csv", StringComparison.OrdinalIgnoreCase)) //TODO: Make class that executes for every csv in zip OR for one csv upload
+                                if (!entry.FullName.EndsWith(".csv", StringComparison.OrdinalIgnoreCase)) continue;
+                                try
                                 {
-                                    try
+                                    var dt = new DataTable();
+                                    using (var sr = new StreamReader(entry.Open())) //build dt from .csv
                                     {
-                                        DataTable dt = new DataTable();
-                                        using (StreamReader sr = new StreamReader(entry.Open())) //build dt from .csv
+                                        sr.ReadLine();
+                                        sr.ReadLine();
+                                        var headers = sr.ReadLine().Split(',');
+                                        foreach (var header in headers)
                                         {
-                                            sr.ReadLine();
-                                            sr.ReadLine();
-                                            string[] headers = sr.ReadLine().Split(',');
-                                            foreach (string header in headers)
-                                            {
-                                                dt.Columns.Add(header);
-                                            }
-                                            while (!sr.EndOfStream)
-                                            {
-                                                string[] rows = sr.ReadLine().Split(',');
-                                                DataRow dr = dt.NewRow();
-                                                for (int i = 0; i < headers.Length; i++)
-                                                {
-                                                    dr[i] = rows[i];
-                                                }
-                                                if (int.TryParse(dr[2].ToString(), out var s))
-                                                    heartrate = s;
-                                                else
-                                                {
-                                                    heartrate = 0;
-                                                }
-                                                if (heartrate >= UserRange1LB && heartrate <= UserRange1UB)
-                                                    Range1Seconds++;
-                                                else if (heartrate >= UserRange2LB && heartrate <= UserRange2UB)
-                                                    Range2Seconds++;
-                                                else if (heartrate >= UserRange3LB && heartrate <= UserRange3UB)
-                                                    Range3Seconds++;
-                                                else if (heartrate >= UserRange4LB && heartrate <= UserRange4UB)
-                                                    Range4Seconds++;
-                                                else if (heartrate >= UserRange5LB && heartrate <= UserRange5UB)
-                                                    Range5Seconds++;
-                                                dt.Rows.Add(dr);
-                                            }
+                                            dt.Columns.Add(header);
                                         }
+                                        while (!sr.EndOfStream)
+                                        {
+                                            var rows = sr.ReadLine().Split(',');
+                                            var dr = dt.NewRow();
+                                            for (var i = 0; i < headers.Length; i++)
+                                            {
+                                                dr[i] = rows[i];
+                                            }
 
-                                        //all done with csv, calculate points.
-                                        Range1Minutes = decimal.Divide(Range1Seconds, 60);
-                                        Range2Minutes = decimal.Divide(Range2Seconds, 60);
-                                        Range3Minutes = decimal.Divide(Range3Seconds, 60);
-                                        Range4Minutes = decimal.Divide(Range4Seconds, 60);
-                                        Range5Minutes = decimal.Divide(Range5Seconds, 60);
+                                            var heartrate = int.TryParse(dr[2].ToString(), out var s) ? s : 0;
+                                            if (heartrate >= userRange1Lb && heartrate <= userRange1Ub)
+                                                range1Seconds++;
+                                            else if (heartrate >= userRange2Lb && heartrate <= userRange2Ub)
+                                                range2Seconds++;
+                                            else if (heartrate >= userRange3Lb && heartrate <= userRange3Ub)
+                                                range3Seconds++;
+                                            else if (heartrate >= userRange4Lb && heartrate <= userRange4Ub)
+                                                range4Seconds++;
+                                            else if (heartrate >= userRange5Lb && heartrate <= userRange5Ub)
+                                                range5Seconds++;
+                                            dt.Rows.Add(dr);
+                                        }
+                                    }
 
-                                        Range1Points = Range1Minutes * ((int)dtPointsPerMinute.AsEnumerable().Where(x => x.Field<int>("HeartRateZone").Equals(1)).FirstOrDefault()["Points"]);
-                                        Range2Points = Range2Minutes * ((int)dtPointsPerMinute.AsEnumerable().Where(x => x.Field<int>("HeartRateZone").Equals(2)).FirstOrDefault()["Points"]);
-                                        Range3Points = Range3Minutes * ((int)dtPointsPerMinute.AsEnumerable().Where(x => x.Field<int>("HeartRateZone").Equals(3)).FirstOrDefault()["Points"]);
-                                        Range4Points = Range4Minutes * ((int)dtPointsPerMinute.AsEnumerable().Where(x => x.Field<int>("HeartRateZone").Equals(4)).FirstOrDefault()["Points"]);
-                                        Range5Points = Range5Minutes * ((int)dtPointsPerMinute.AsEnumerable().Where(x => x.Field<int>("HeartRateZone").Equals(5)).FirstOrDefault()["Points"]);
+                                    //all done with csv, calculate points.
+                                    var range1Minutes = decimal.Divide(range1Seconds, 60);
+                                    var range2Minutes = decimal.Divide(range2Seconds, 60);
+                                    var range3Minutes = decimal.Divide(range3Seconds, 60);
+                                    var range4Minutes = decimal.Divide(range4Seconds, 60);
+                                    var range5Minutes = decimal.Divide(range5Seconds, 60);
 
-                                        PointsToAdd = int.Parse(Math.Round(Range1Points + Range2Points + Range3Points + Range4Points + Range5Points).ToString());
-                                        TotalPoints += PointsToAdd;                                        
+                                    var range1Points = range1Minutes * ((int)dtPointsPerMinute.AsEnumerable().FirstOrDefault(x => x.Field<int>("HeartRateZone").Equals(1))["Points"]);
+                                    var range2Points = range2Minutes * ((int)dtPointsPerMinute.AsEnumerable().FirstOrDefault(x => x.Field<int>("HeartRateZone").Equals(2))["Points"]);
+                                    var range3Points = range3Minutes * ((int)dtPointsPerMinute.AsEnumerable().FirstOrDefault(x => x.Field<int>("HeartRateZone").Equals(3))["Points"]);
+                                    var range4Points = range4Minutes * ((int)dtPointsPerMinute.AsEnumerable().FirstOrDefault(x => x.Field<int>("HeartRateZone").Equals(4))["Points"]);
+                                    var range5Points = range5Minutes * ((int)dtPointsPerMinute.AsEnumerable().FirstOrDefault(x => x.Field<int>("HeartRateZone").Equals(5))["Points"]);
 
-                                        RecordFileName(entry.Name, PointsToAdd);
+                                    var pointsToAdd = int.Parse(Math.Round(range1Points + range2Points + range3Points + range4Points + range5Points).ToString());
+                                    totalPoints += pointsToAdd;                                        
+
+                                    RecordFileName(entry.Name, pointsToAdd);
                                         
 
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        Response.Write("Processing Error: " + ex.Message + " ");
-                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    Response.Write("Processing Error: " + ex.Message + " ");
                                 }
                             }
                         }
                         ////Write final total
                         UpdateTotalPoints();
-                        Response.Write($"The file has been uploaded. {TotalPoints.ToString()} points have been added to your total score.");
+                        Response.Write($"The file has been uploaded. {totalPoints.ToString()} points have been added to your total score.");
                         //RecordFileName(FileName, TotalPoints);
 
                         //Delete CSV from Server Data
-                        File.Delete(SaveLocation);
+                        File.Delete(saveLocation);
                     }
                     else
                     {
@@ -181,10 +183,10 @@ namespace HeartRateChallenge
         }
         protected DataTable GetHeartRateZones()
         {
-            DataTable dt = new DataTable();
-            SqlConnection sqlCon = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["connStr"].ConnectionString);
-            string strSP = "dbo.sp_SelectHeartRateZones";
-            SqlCommand sqlCmd = new SqlCommand(strSP, sqlCon)
+            var dt = new DataTable();
+            var sqlCon = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["connStr"].ConnectionString);
+            const string strSp = "dbo.sp_SelectHeartRateZones";
+            var sqlCmd = new SqlCommand(strSp, sqlCon)
             {
                 CommandType = CommandType.StoredProcedure,
                 CommandTimeout = 0
@@ -194,7 +196,7 @@ namespace HeartRateChallenge
             try
             {
                 sqlCon.Open();
-                using (SqlDataAdapter a = new SqlDataAdapter(sqlCmd))
+                using (var a = new SqlDataAdapter(sqlCmd))
                 {
                     a.Fill(dt);
                 }
@@ -209,10 +211,10 @@ namespace HeartRateChallenge
 
         protected DataTable GetPointsPerMinute()
         {
-            DataTable dt = new DataTable();
-            SqlConnection sqlCon = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["connStr"].ConnectionString);
-            string strSP = "dbo.sp_SelectPointsPerMinute";
-            SqlCommand sqlCmd = new SqlCommand(strSP, sqlCon)
+            var dt = new DataTable();
+            var sqlCon = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["connStr"].ConnectionString);
+            const string strSp = "dbo.sp_SelectPointsPerMinute";
+            var sqlCmd = new SqlCommand(strSp, sqlCon)
             {
                 CommandType = CommandType.StoredProcedure,
                 CommandTimeout = 0
@@ -221,7 +223,7 @@ namespace HeartRateChallenge
             try
             {
                 sqlCon.Open();
-                using (SqlDataAdapter a = new SqlDataAdapter(sqlCmd))
+                using (var a = new SqlDataAdapter(sqlCmd))
                 {
                     a.Fill(dt);
                 }
@@ -237,9 +239,9 @@ namespace HeartRateChallenge
 
         protected void UpdateTotalPoints()
         {
-            SqlConnection sqlCon = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["connStr"].ConnectionString);
-            string strSP = "dbo.sp_UpdateTotalPoints";
-            SqlCommand sqlCmd = new SqlCommand(strSP, sqlCon)
+            var sqlCon = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["connStr"].ConnectionString);
+            const string strSp = "dbo.sp_UpdateTotalPoints";
+            var sqlCmd = new SqlCommand(strSp, sqlCon)
             {
                 CommandType = CommandType.StoredProcedure,
                 CommandTimeout = 0
@@ -258,19 +260,19 @@ namespace HeartRateChallenge
             }
         }
 
-        protected void RecordFileName(string FileName, int PointChange)
+        protected void RecordFileName(string fileName, int pointChange)
         {
-            SqlConnection sqlCon = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["connStr"].ConnectionString);
-            string strSP = "dbo.sp_InsertUploadHistory";
-            SqlCommand sqlCmd = new SqlCommand(strSP, sqlCon)
+            var sqlCon = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["connStr"].ConnectionString);
+            const string strSp = "dbo.sp_InsertUploadHistory";
+            var sqlCmd = new SqlCommand(strSp, sqlCon)
             {
                 CommandType = CommandType.StoredProcedure,
                 CommandTimeout = 0
             };
             sqlCmd.Parameters.AddWithValue("@CompetitorID", int.Parse(ddlCompetitorName.SelectedValue));
-            sqlCmd.Parameters.AddWithValue("@FileName", FileName);
+            sqlCmd.Parameters.AddWithValue("@FileName", fileName);
             sqlCmd.Parameters.AddWithValue("@UploadDate", DateTime.Now);
-            sqlCmd.Parameters.AddWithValue("@PointChange", PointChange);
+            sqlCmd.Parameters.AddWithValue("@PointChange", pointChange);
 
             try
             {
@@ -284,19 +286,19 @@ namespace HeartRateChallenge
             }
         }
 
-        protected bool CheckFileRecords(int CompetitorID, string FileName)
+        protected bool CheckFileRecords(int competitorId, string fileName)
         {
-            bool Record = false;
-            string Exists = "";
-            SqlConnection sqlCon = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["connStr"].ConnectionString);
-            string strSP = "dbo.sp_ValidateUploadHistory";
-            SqlCommand sqlCmd = new SqlCommand(strSP, sqlCon)
+            var record = false;
+            var exists = "";
+            var sqlCon = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["connStr"].ConnectionString);
+            const string strSp = "dbo.sp_ValidateUploadHistory";
+            var sqlCmd = new SqlCommand(strSp, sqlCon)
             {
                 CommandType = CommandType.StoredProcedure,
                 CommandTimeout = 0
             };
-            sqlCmd.Parameters.AddWithValue("@CompetitorID", CompetitorID);
-            sqlCmd.Parameters.AddWithValue("@FileName", FileName);
+            sqlCmd.Parameters.AddWithValue("@CompetitorID", competitorId);
+            sqlCmd.Parameters.AddWithValue("@FileName", fileName);
 
             try
             {
@@ -304,7 +306,7 @@ namespace HeartRateChallenge
                 var rdr = sqlCmd.ExecuteReader();
                 if (rdr.HasRows)
                 {
-                    Exists = rdr.Read().ToString();
+                    exists = rdr.Read().ToString();
                 }
 
                 //TODO: STORE RETURNED RECORD FILENAME IN STRING
@@ -316,10 +318,10 @@ namespace HeartRateChallenge
                 Response.Write("Error During RecordFileName: " + ex.Message);
             }
 
-            if (Exists == "True")
-                Record = true;
+            if (exists == "True")
+                record = true;
 
-            return Record;
+            return record;
         }
     }
 }
