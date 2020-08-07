@@ -1,0 +1,39 @@
+﻿{
+   "ContextClassName": "HRCContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Data\\HRC",
+   "ProjectRootNamespace": "HRCDB",
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 0,
+   "Tables": [
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[tbl_CompetitorHeartRateZones]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[tbl_Leaderboard]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[tbl_ScoreConfig]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[tbl_UploadHistory]"
+      }
+   ],
+   "UseDatabaseNames": false,
+   "UseDbContextSplitting": false,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseInflector": false,
+   "UseLegacyPluralizer": false,
+   "UseNodaTime": false,
+   "UseSpatial": false,
+   "UseStoredProcedures": false
+}
