@@ -7,9 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeartRateChallenge", "Heart
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManualCalculator", "ManualCalculator\ManualCalculator.csproj", "{AF66E34E-5378-4A80-90D1-CF1F841C9CEC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EndToEnd", "EndToEnd\EndToEnd.csproj", "{72BDCE5E-32D6-49F0-8F3D-15DADB3A368B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorHRC", "BlazorHRC\BlazorHRC.csproj", "{BEC167AF-985F-41F0-A097-B1D678BEE901}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRCBlazor", "HRCBlazor\HRCBlazor.csproj", "{4EF1CCE4-AD30-4D7A-B9C6-0E917905AE50}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRC.Data", "HRC.Data\HRC.Data.csproj", "{DEE853A6-69EC-4CD5-B0D1-B090BED43325}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorHRCAuth", "BlazorHRCAuth\BlazorHRCAuth.csproj", "{A3D4E9B6-FF42-4F53-B9B6-CF7D8024DA75}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,14 +27,18 @@ Global
 		{AF66E34E-5378-4A80-90D1-CF1F841C9CEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF66E34E-5378-4A80-90D1-CF1F841C9CEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF66E34E-5378-4A80-90D1-CF1F841C9CEC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{72BDCE5E-32D6-49F0-8F3D-15DADB3A368B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{72BDCE5E-32D6-49F0-8F3D-15DADB3A368B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{72BDCE5E-32D6-49F0-8F3D-15DADB3A368B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{72BDCE5E-32D6-49F0-8F3D-15DADB3A368B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4EF1CCE4-AD30-4D7A-B9C6-0E917905AE50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4EF1CCE4-AD30-4D7A-B9C6-0E917905AE50}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4EF1CCE4-AD30-4D7A-B9C6-0E917905AE50}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4EF1CCE4-AD30-4D7A-B9C6-0E917905AE50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEC167AF-985F-41F0-A097-B1D678BEE901}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEC167AF-985F-41F0-A097-B1D678BEE901}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEC167AF-985F-41F0-A097-B1D678BEE901}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEC167AF-985F-41F0-A097-B1D678BEE901}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEE853A6-69EC-4CD5-B0D1-B090BED43325}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEE853A6-69EC-4CD5-B0D1-B090BED43325}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEE853A6-69EC-4CD5-B0D1-B090BED43325}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEE853A6-69EC-4CD5-B0D1-B090BED43325}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3D4E9B6-FF42-4F53-B9B6-CF7D8024DA75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3D4E9B6-FF42-4F53-B9B6-CF7D8024DA75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3D4E9B6-FF42-4F53-B9B6-CF7D8024DA75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3D4E9B6-FF42-4F53-B9B6-CF7D8024DA75}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

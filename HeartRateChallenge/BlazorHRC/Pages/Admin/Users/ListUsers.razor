@@ -1,0 +1,76 @@
+﻿@using BlazorHRC.Data
+@using BlazorHRC.Data.Entities
+@using BlazorHRC.Data.Services
+@using Microsoft.EntityFrameworkCore
+@page "/listusers"
+
+@inject CustomHttpClient Http
+@inject AppSettingsService AppSettingsService
+
+<h2>User Details</h2>
+<p>
+    <a href="/adduser">Add New User</a>
+</p>
+@if (users == null)
+{
+    <img src="./homerloader.gif" />
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Password</th>
+                <th>Zone1LB</th>
+                <th>Zone1UB</th>
+                <th>Zone2LB</th>
+                <th>Zone2UB</th>
+                <th>Zone3LB</th>
+                <th>Zone3UB</th>
+                <th>Zone4LB</th>
+                <th>Zone4UB</th>
+                <th>Zone5LB</th>
+                <th>Zone5UB</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var user in users)
+        {
+            <tr>
+                <td>@user.Username</td>
+                <td>@user.Name</td>
+                <td>@user.Password</td>
+                <td>@user.Zone1LowerBound</td>
+                <td>@user.Zone1UpperBound</td>
+                <td>@user.Zone2LowerBound</td>
+                <td>@user.Zone2UpperBound</td>
+                <td>@user.Zone3LowerBound</td>
+                <td>@user.Zone3UpperBound</td>
+                <td>@user.Zone4LowerBound</td>
+                <td>@user.Zone4UpperBound</td>
+                <td>@user.Zone5LowerBound</td>
+                <td>@user.Zone5UpperBound</td>
+                <td>
+                    <a href='/edituser/@user.Username'>Edit</a>
+                    <a href='/deleteuser/@user.Username'>Delete</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    User[] users;
+    string baseUrl;
+
+    protected override async Task OnInitializedAsync()
+    {
+        baseUrl = AppSettingsService.GetBaseUrl();
+        users = await Http.GetJsonAsync<User[]>(baseUrl + "/api/users/get");
+    }
+
+}

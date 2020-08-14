@@ -1,10 +1,10 @@
 {
   "iisSettings": {
-    "windowsAuthentication": false,
+    "windowsAuthentication": true,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:49809",
-      "sslPort": 44356
+      "applicationUrl": "http://localhost:57359",
+      "sslPort": 44395
     }
   },
   "profiles": {
@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "HRCBlazor": {
+    "BlazorHRC": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

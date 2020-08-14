@@ -18,9 +18,9 @@ namespace HRCDB.Data.HRC
         }
 
         public virtual DbSet<CompetitorHeartRateZones> CompetitorHeartRateZones { get; set; }
-        public virtual DbSet<Leaderboard> Leaderboard { get; set; }
-        public virtual DbSet<ScoreConfig> ScoreConfig { get; set; }
-        public virtual DbSet<UploadHistory> UploadHistory { get; set; }
+        public virtual DbSet<Leaderboard> Leaderboards { get; set; }
+        public virtual DbSet<ScoreConfig> ScoreConfigs { get; set; }
+        public virtual DbSet<UploadHistory> UploadHistorys { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

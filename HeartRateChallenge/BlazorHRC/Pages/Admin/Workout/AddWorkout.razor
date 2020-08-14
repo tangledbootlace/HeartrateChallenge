@@ -1,0 +1,57 @@
+﻿@using BlazorHRC.Data
+@using BlazorHRC.Data.Entities
+@using BlazorHRC.Data.Services
+
+@page "/addworkout"
+
+@inject CustomHttpClient Http
+@inject NavigationManager NavigationManager 
+@inject AppSettingsService AppSettingsService
+
+<h2>Add Workout</h2>
+<hr/>
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="Username" class="control-label">Username</label>
+                <input for="Username" class="form-control" @bind="@workout.Username" />
+            </div>
+            <div class="form-group">
+                <label for="FileName" class="control-label">File Name</label>
+                <input for="FileName" class="form-control" @bind="@workout.FileName" />
+            </div>
+            <div class="form-group">
+                <label for="UploadDate" class="control-label">Upload Date</label>
+                <input for="UploadDate" class="form-control" @bind="@workout.UploadDate" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="@CreateWorkout" value="Save"/>
+                <input type="button" class ="btn" @onclick="@Cancel" value="Cancel"/>
+            </div>
+        </div>
+    </div>
+</form>
+
+@code {
+
+    Workout workout = new Workout();
+    string baseUrl;
+
+    protected async Task CreateWorkout()
+    {
+        baseUrl = AppSettingsService.GetBaseUrl();
+        await Http.PostJsonAsync(baseUrl + "/api/workouts/create", workout);
+        NavigationManager.NavigateTo("listworkouts");
+    }
+
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("listworkouts");
+    }
+
+}

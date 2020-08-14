@@ -1,0 +1,58 @@
+﻿@using BlazorHRC.Data  
+@using BlazorHRC.Data.Entities
+@using BlazorHRC.Data.Services
+  
+@page "/deleteworkout/{id}"  
+  
+@inject CustomHttpClient Http  
+@inject NavigationManager NavigationManager  
+@inject AppSettingsService AppSettingsService  
+  
+<h2>Delete</h2>  
+<p>Are you sure you want to delete this workout with Id :<b> @id</b></p>  
+<br />  
+<div class="col-md-4">  
+    <table class="table">  
+        <tr>  
+            <td>Username</td>  
+            <td>@workout.Username</td>  
+        </tr>  
+        <tr>  
+            <td>File Name</td>  
+            <td>@workout.FileName</td>  
+        </tr>  
+        <tr>  
+            <td>Upload Date</td>  
+            <td>@workout.UploadDate</td>  
+        </tr> 
+    </table>  
+    <div class="form-group">  
+        <input type="button" value="Delete" @onclick="@Delete" class="btn btn-primary" />  
+        <input type="button" value="Cancel" @onclick="@Cancel" class="btn" />  
+    </div>  
+</div>  
+  
+@code {  
+  
+    [Parameter]  
+    public string id { get; set; }  
+    string baseUrl;  
+    Workout workout = new Workout();  
+  
+    protected override async Task OnInitializedAsync()  
+    {  
+        baseUrl = AppSettingsService.GetBaseUrl();  
+        workout = await Http.GetJsonAsync<Workout>(baseUrl + "/api/workouts/details/" + id);  
+    }  
+  
+    protected async Task Delete()  
+    {  
+        await Http.DeleteAsync(baseUrl + "/api/workouts/delete/" + id);  
+        NavigationManager.NavigateTo("listworkouts");  
+    }  
+  
+    void Cancel()  
+    {  
+        NavigationManager.NavigateTo("listworkouts");  
+    }  
+}

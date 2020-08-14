@@ -1,0 +1,94 @@
+﻿@using BlazorHRC.Data  
+@using BlazorHRC.Data.Entities
+@using BlazorHRC.Data.Services
+  
+@page "/deleteuser/{username}"  
+  
+@inject CustomHttpClient Http  
+@inject NavigationManager NavigationManager  
+@inject AppSettingsService AppSettingsService  
+  
+<h2>Delete</h2>  
+<p>Are you sure you want to delete this workout with Username :<b> @username</b></p>  
+<br />  
+<div class="col-md-4">  
+    <table class="table">
+        <tr>
+            <td>Username</td>
+            <td>@user.Username</td>
+        </tr>
+        <tr>
+            <td>Password</td>
+            <td>@user.Password</td>
+        </tr>
+        <tr>
+            <td>Zone1LowerBound</td>
+            <td>@user.Zone1LowerBound</td>
+        </tr>
+        <tr>
+            <td>Zone1UpperBound</td>
+            <td>@user.Zone1UpperBound</td>
+        </tr>
+        <tr>
+            <td>Zone2LowerBound</td>
+            <td>@user.Zone2LowerBound</td>
+        </tr>
+        <tr>
+            <td>Zone2UpperBound</td>
+            <td>@user.Zone2UpperBound</td>
+        </tr>
+        <tr>
+            <td>Zone3LowerBound</td>
+            <td>@user.Zone3LowerBound</td>
+        </tr>
+        <tr>
+            <td>Zone3UpperBound</td>
+            <td>@user.Zone3UpperBound</td>
+        </tr>
+        <tr>
+            <td>Zone4LowerBound</td>
+            <td>@user.Zone4LowerBound</td>
+        </tr>
+        <tr>
+            <td>Zone4UpperBound</td>
+            <td>@user.Zone4UpperBound</td>
+        </tr>
+        <tr>
+            <td>Zone5LowerBound</td>
+            <td>@user.Zone5LowerBound</td>
+        </tr>
+        <tr>
+            <td>Zone5UpperBound</td>
+            <td>@user.Zone5UpperBound</td>
+        </tr>
+    </table>  
+    <div class="form-group">  
+        <input type="button" value="Delete" @onclick="@Delete" class="btn btn-primary" />  
+        <input type="button" value="Cancel" @onclick="@Cancel" class="btn" />  
+    </div>  
+</div>  
+  
+@code {  
+  
+    [Parameter]  
+    public string username { get; set; }  
+    string baseUrl;  
+    User user = new User();  
+  
+    protected override async Task OnInitializedAsync()  
+    {  
+        baseUrl = AppSettingsService.GetBaseUrl();  
+        user = await Http.GetJsonAsync<User>(baseUrl + "/api/users/details/" + username);  
+    }  
+  
+    protected async Task Delete()  
+    {  
+        await Http.DeleteAsync(baseUrl + "/api/users/delete/" + username);  
+        NavigationManager.NavigateTo("listusers");  
+    }  
+  
+    void Cancel()  
+    {  
+        NavigationManager.NavigateTo("listusers");  
+    }  
+}

@@ -1,0 +1,94 @@
+﻿@using BlazorHRC.Data
+@using BlazorHRC.Data.Entities
+@using BlazorHRC.Data.Services
+
+@page "/adduser"
+
+@inject CustomHttpClient Http
+@inject NavigationManager NavigationManager 
+@inject AppSettingsService AppSettingsService
+
+
+<h2>Add User</h2>
+<hr/>
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="Username" class="control-label">Username</label>
+                <input for="Username" class="form-control" @bind="@user.Username" />
+            </div>
+            <div class="form-group">
+                <label for="Password" class="control-label">Password</label>
+                <input for="Password" class="form-control" @bind="@user.Password" />
+            </div>
+            <div class="form-group">
+                <label for="Zone1LowerBound" class="control-label">Zone1LowerBound</label>
+                <input for="Zone1LowerBound" class="form-control" @bind="@user.Zone1LowerBound" />
+            </div>
+            <div class="form-group">
+                <label for="Zone1UpperBound" class="control-label">Zone1UpperBound</label>
+                <input for="Zone1UpperBound" class="form-control" @bind="@user.Zone1UpperBound" />
+            </div>
+            <div class="form-group">
+                <label for="Zone2LowerBound" class="control-label">Zone2LowerBound</label>
+                <input for="Zone2LowerBound" class="form-control" @bind="@user.Zone2LowerBound" />
+            </div>
+            <div class="form-group">
+                <label for="Zone2UpperBound" class="control-label">Zone2UpperBound</label>
+                <input for="Zone2UpperBound" class="form-control" @bind="@user.Zone2UpperBound" />
+            </div>
+            <div class="form-group">
+                <label for="Zone3LowerBound" class="control-label">Zone3LowerBound</label>
+                <input for="Zone3LowerBound" class="form-control" @bind="@user.Zone3LowerBound" />
+            </div>
+            <div class="form-group">
+                <label for="Zone3UpperBound" class="control-label">Zone2UpperBound</label>
+                <input for="Zone3UpperBound" class="form-control" @bind="@user.Zone3UpperBound" />
+            </div>
+            <div class="form-group">
+                <label for="Zone4LowerBound" class="control-label">Zone4LowerBound</label>
+                <input for="Zone4LowerBound" class="form-control" @bind="@user.Zone4LowerBound" />
+            </div>
+            <div class="form-group">
+                <label for="Zone4UpperBound" class="control-label">Zone2UpperBound</label>
+                <input for="Zone4UpperBound" class="form-control" @bind="@user.Zone4UpperBound" />
+            </div>
+            <div class="form-group">
+                <label for="Zone5LowerBound" class="control-label">Zone5LowerBound</label>
+                <input for="Zone5  LowerBound" class="form-control" @bind="@user.Zone5LowerBound" />
+            </div>
+            <div class="form-group">
+                <label for="Zone5UpperBound" class="control-label">Zone5UpperBound</label>
+                <input for="Zone5UpperBound" class="form-control" @bind="@user.Zone5UpperBound" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="@CreateUser" value="Save"/>
+                <input type="button" class ="btn" @onclick="@Cancel" value="Cancel"/>
+            </div>
+        </div>
+    </div>
+</form>
+
+@code {
+
+    User user = new User();
+    string baseUrl;
+
+    protected async Task CreateUser()
+    {
+        baseUrl = AppSettingsService.GetBaseUrl();
+        await Http.PostJsonAsync(baseUrl + "/api/users/create", user);
+        NavigationManager.NavigateTo("listusers");
+    }
+
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("listusers");
+    }
+
+}

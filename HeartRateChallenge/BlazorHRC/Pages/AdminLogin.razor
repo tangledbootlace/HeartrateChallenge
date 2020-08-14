@@ -1,0 +1,64 @@
+﻿@using BlazorHRC.Data.Entities
+@using BlazorHRC.Data.Services
+@using BlazorHRC.Data
+
+@page "/admin"
+
+@inject CustomHttpClient Http
+@inject NavigationManager NavigationManager
+@inject AppSettingsService AppSettingsService
+
+<h3>Admin Login</h3>
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="Username" class="control-label">Username:</label>
+                <input for="Username" class="form-control" @bind="@user.Username" />
+            </div>
+            <div class="form-group">
+                <label for="Password" class="control-label">Password:</label>
+                <input for="Password" class="form-control" @bind="@user.Password" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="@SubmitAdminLogin" value="Login" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a class="btn btn-primary" href='/listusers'>Users</a>
+</div>
+<br />
+<div>
+    <a class="btn btn-primary" href='/listworkouts'>Workouts</a>
+</div>
+
+
+@code {
+    User[] users;
+    User user = new User();
+    string baseUrl;
+
+    protected override async Task OnInitializedAsync()
+    {
+        baseUrl = AppSettingsService.GetBaseUrl();
+        users = await Http.GetJsonAsync<User[]>(baseUrl + "/api/users/get");
+    }
+
+    protected async Task SubmitAdminLogin()
+    {
+        var validation = users.Where(u => u.Username == user.Username && u.Password == user.Password);
+        if (validation.Any())
+        {
+            NavigationManager.NavigateTo("listusers");
+        }
+    }
+
+
+}

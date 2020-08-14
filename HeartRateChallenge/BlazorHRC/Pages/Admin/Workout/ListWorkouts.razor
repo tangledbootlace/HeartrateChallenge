@@ -1,0 +1,58 @@
+﻿@using BlazorHRC.Data
+@using BlazorHRC.Data.Entities
+@using BlazorHRC.Data.Services
+@using Microsoft.EntityFrameworkCore
+@page "/listworkouts"
+
+@inject CustomHttpClient Http
+@inject AppSettingsService AppSettingsService
+
+<h2>Workout Details</h2>
+<p>
+    <a href="/addworkout">Add New Workout</a>
+</p>
+@if (workouts == null)
+{
+    <img src="./homerloader.gif" />
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>File Name</th>
+            <th>Upload Date</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+            @foreach (var workout in workouts)
+            {
+                <tr>
+                    <td>@workout.Id</td>
+                    <td>@workout.Username</td>
+                    <td>@workout.FileName</td>
+                    <td>@workout.UploadDate</td>
+                    <td>
+                        <a href='/editworkout/@workout.Id'>Edit</a>
+                        <a href='/deleteworkout/@workout.Id'>Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    Workout[] workouts;
+    string baseUrl;
+
+    protected override async Task OnInitializedAsync()
+    {
+        baseUrl = AppSettingsService.GetBaseUrl();
+        workouts = await Http.GetJsonAsync<Workout[]>(baseUrl + "/api/workouts/get");
+    }
+
+}
